@@ -1,0 +1,19 @@
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# المحررات
+.vscode/
+.idea/
+*.swp
+*~
+
+# ملفات مؤقتة
+node_modules/
+*.log
+.cache/
+
+# ملفات شخصية لا تُرفع
+*.local.html
+scratch/
