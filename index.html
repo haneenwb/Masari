@@ -992,11 +992,6 @@ const NAV_ACCT = [["profile","i-user"],["guide","i-book"],["sources","i-shield"]
 function render(){
   document.documentElement.lang=L().htmlLang; document.documentElement.dir=L().dir;
   document.documentElement.setAttribute("data-theme", state.theme);
-  if(!state.authed){
-    app.innerHTML = vAuth();
-    renderOverlay();
-    return;
-  }
   let body="";
   try{ body = analyzing ? vAnalyzing() : (VIEWS[state.route]||vHome)(); }
   catch(e){ body = `<div class="card"><h2>${esc(e.message)}</h2><button class="btn sec" data-act="go" data-route="home">${t("nav.home")}</button></div>`; }
@@ -1997,8 +1992,6 @@ function vSettings(){
   return `<section class="card pad-lg"><h1 style="margin:0">${t("nav.settings")}</h1><div class="rule"></div>
     <div class="row"><button class="btn sec" data-act="lang">${t("ui.lang")}</button>
       <button class="btn sec" data-act="theme">${t("ui.theme")}</button></div>
-    <div class="rule"></div>
-    <div class="row"><button class="btn sec" data-act="logout">${t("auth.logout")}</button></div>
     <div class="rule"></div><p class="cap">${t("consent.body")}</p>
     <button class="btn sec" data-act="delete">${t("src.del")}</button></section>`;
 }
