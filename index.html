@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مساري — مسارك، خطوتك القادمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{
+  --bg:#f6f9fc; --card:#ffffff; --card-2:#f6f9fc;
+  --brand:#533afd; --brand-2:#665efd; --brand-deep:#4434d4; --brand-press:#2e2b8c;
+  --brand-tint:#f0efff; --brand-pill:#b9b9f9; --brand-ink:#0d253d; --nav:#0d253d;
+  --accent:#665efd; --accent-2:#f5e9d4; --ruby:#ea2261; --magenta:#f96bee;
+  --gold:#9b6829; --gold-tint:#f5e9d4;
+  --text:#0d253d; --muted:#64748d; --line:#e3e8ee; --line-2:#eef2f6;
+  --ok:#0e6245; --warn:#9b6829; --bad:#ea2261;
+  --r-s:6px; --r-m:8px; --r-l:12px; --r-xl:16px;
+  --sh:0 1px 3px rgba(0,55,112,.08);
+  --sh-2:0 8px 24px rgba(0,55,112,.12), 0 2px 6px rgba(0,55,112,.06);
+  --f-ar:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-en:"Inter",system-ui,sans-serif;
+  --t:160ms cubic-bezier(.2,.7,.3,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b1324; --card:#131d33; --card-2:#1c2844; --brand:#7b73ff; --brand-2:#9b93ff;
+  --brand-deep:#665efd; --brand-press:#533afd; --brand-tint:#1e2548; --brand-pill:#2a3360;
+  --brand-ink:#e8edfc; --nav:#080e1c; --accent:#7b73ff; --accent-2:#352f20;
+  --ruby:#f45887; --magenta:#fa8df2; --gold:#d4a04d; --gold-tint:#332918;
+  --text:#f1f5fd; --muted:#8898aa; --line:#243352; --line-2:#1b263e;
+  --ok:#4ade80; --warn:#d4a04d; --bad:#f45887;
+  --sh:0 1px 3px rgba(0,0,0,.45); --sh-2:0 8px 24px rgba(0,0,0,.55);
+}}
+:root[data-theme="dark"]{
+  --bg:#0b1324; --card:#131d33; --card-2:#1c2844; --brand:#7b73ff; --brand-2:#9b93ff;
+  --brand-deep:#665efd; --brand-press:#533afd; --brand-tint:#1e2548; --brand-pill:#2a3360;
+  --brand-ink:#e8edfc; --nav:#080e1c; --accent:#7b73ff; --accent-2:#352f20;
+  --ruby:#f45887; --magenta:#fa8df2; --gold:#d4a04d; --gold-tint:#332918;
+  --text:#f1f5fd; --muted:#8898aa; --line:#243352; --line-2:#1b263e;
+  --ok:#4ade80; --warn:#d4a04d; --bad:#f45887;
+  --sh:0 1px 3px rgba(0,0,0,.45); --sh-2:0 8px 24px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--text); font-family:var(--f-ar); font-size:15px; font-weight:400; line-height:1.8;
+  -webkit-font-smoothing:antialiased; font-feature-settings:"ss01"}
+html[lang="en"] body{font-family:var(--f-en); line-height:1.6}
+h1,h2,h3,h4{margin:0 0 .35em; color:var(--text); font-weight:300; line-height:1.2}
+h1{font-size:32px; line-height:1.15}
+h2{font-size:22px; line-height:1.25}
+h3{font-size:18px; line-height:1.4}
+html[lang="en"] h1{letter-spacing:-.64px}
+html[lang="en"] h2{letter-spacing:-.22px}
+html[lang="en"] h3{letter-spacing:-.1px}
+html[lang="en"] body{font-weight:300}
+.num,.tnum,.pill,.cvsheet,.bar-head b,.lab b{font-variant-numeric:tabular-nums; font-feature-settings:"tnum"}
+h4{font-size:14px; color:var(--muted); font-weight:500}
+p{margin:0 0 .9em; max-width:72ch}
+.cap,small{font-size:13px; color:var(--muted); line-height:1.65}
+a{color:var(--brand-2)}
+button,input,select,textarea{font-family:inherit; font-size:15px; color:var(--text)}
+:focus-visible{outline:2.5px solid var(--brand-2); outline-offset:2px; border-radius:6px}
+
+/* ---------------- shell ---------------- */
+.shell{display:flex; flex-direction:column; min-height:100dvh; position:relative}
+.side{display:none; position:fixed; top:0; bottom:0; width:280px; max-width:85vw; background:var(--nav); padding:16px 14px; z-index:70; overflow-y:auto}
+html[dir="ltr"] .side{right:0; left:auto; border-left:1px solid rgba(255,255,255,.1); box-shadow:-6px 0 28px rgba(0,0,0,.35)}
+html[dir="ltr"] .side.open{display:block; animation:sideInLtr .2s ease both}
+@keyframes sideInLtr{from{opacity:0; transform:translateX(20px)}to{opacity:1; transform:none}}
+
+html[dir="rtl"] .side{left:0; right:auto; border-right:1px solid rgba(255,255,255,.1); box-shadow:6px 0 28px rgba(0,0,0,.35)}
+html[dir="rtl"] .side.open{display:block; animation:sideInRtl .2s ease both}
+@keyframes sideInRtl{from{opacity:0; transform:translateX(-20px)}to{opacity:1; transform:none}}
+
+.side-veil{position:fixed; inset:0; z-index:65; background:rgba(8,24,40,.45); animation:fade .2s ease both}
+.side-hd{display:flex; align-items:center; justify-content:space-between; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:8px}
+.btn-side-close{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; padding:0; background:rgba(255,255,255,.08); border:0; border-radius:var(--r-s); color:#a8b8cc; cursor:pointer; font-size:13px; transition:all var(--t)}
+.btn-side-close:hover{background:rgba(255,255,255,.18); color:#fff}
+.side .logo svg{--brand-ink:#ffffff; --gold:#f5e9d4}
+.side .logo b{color:#fff}
+.logo{display:flex; align-items:center; gap:10px; padding:6px 8px 16px}
+.logo svg{width:38px; height:36px; flex:none}
+.brand-big{width:96px; height:92px; display:block; margin-bottom:10px}
+.logo b{font-size:18px; letter-spacing:.01em; display:block}
+.side nav{display:grid; gap:2px}
+.side nav h4{padding:16px 10px 4px; margin:0; font-size:10px; font-weight:400; letter-spacing:.1px; text-transform:uppercase; color:#7888a2}
+.side nav button{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:0;
+  padding:9px 11px; border-radius:var(--r-m); color:#a8b8cc; cursor:pointer; transition:background var(--t), color var(--t)}
+.side nav button svg{width:19px; height:19px; flex:none}
+.side nav button:hover{background:rgba(255,255,255,.08); color:#fff}
+.side nav button[aria-current="page"]{background:var(--brand); color:#fff; font-weight:500; box-shadow:0 2px 8px rgba(83,58,253,.35)}
+.main{min-width:0; display:flex; flex-direction:column; flex:1; width:100%}
+.topbar{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.88); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line); padding:12px 22px; display:flex; align-items:center; gap:10px}
+:root[data-theme="dark"] .topbar{background:rgba(11,19,36,.88)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .topbar{background:rgba(11,19,36,.88)}}
+.btn-back{display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; padding:0;
+  background:none; border:1px solid transparent; border-radius:var(--r-s); color:var(--muted); cursor:pointer; flex:none; transition:all var(--t)}
+.btn-back:hover{color:var(--text); background:var(--card-2); border-color:var(--line-2)}
+.btn-back:active{transform:scale(.95)}
+.btn-back svg{width:18px; height:18px}
+.btn-more{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; padding:0;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-m); color:var(--text); cursor:pointer; flex:none; transition:all var(--t)}
+.btn-more:hover{background:var(--card-2); border-color:var(--brand)}
+.btn-more.open{background:var(--brand); color:#fff; border-color:var(--brand)}
+.btn-more svg{width:18px; height:18px}
+.topbar .t-title{font-weight:500; margin-inline-end:auto; font-size:16px; display:flex; align-items:center; gap:10px}
+.topbar .t-title b{font-size:18px; font-weight:700; letter-spacing:.01em; color:var(--text); line-height:1}
+.topbar-logo{width:36px; height:34px; display:block; flex:none}
+.page{padding:22px; max-width:1180px; width:100%; margin-inline:auto}
+@media(max-width:900px){
+  .page{padding:16px 14px 84px}
+  .topbar{padding:10px 14px}
+  h1{font-size:23px}
+}
+
+/* ---------------- primitives ---------------- */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r-l); padding:20px; box-shadow:var(--sh)}
+.card.pad-lg{padding:24px}
+.card.tint{background:var(--accent-2); border:1px solid rgba(155,104,41,.18)}
+:root[data-theme="dark"] .card.tint{background:#252016; border-color:rgba(212,160,77,.25)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card.tint{background:#252016; border-color:rgba(212,160,77,.25)}}
+.card.hov{transition:transform var(--t), box-shadow var(--t), border-color var(--t)}
+.card.hov:hover{transform:translateY(-2px); box-shadow:var(--sh-2); border-color:rgba(83,58,253,.3)}
+.grid{display:grid; gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.split{display:grid; gap:16px; grid-template-columns:1fr}
+@media(min-width:1000px){.split{grid-template-columns:1fr 1fr}.split.wide{grid-template-columns:1.15fr .85fr}}
+.row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.spread{justify-content:space-between}
+.stack{display:grid; gap:16px}
+.rule{height:1px; background:var(--line-2); margin:14px 0}
+.btn{background:var(--brand); color:#fff; border:1px solid transparent; padding:9px 17px; border-radius:9999px; cursor:pointer;
+  font-weight:400; font-size:15px; transition:background var(--t), transform var(--t)}
+:root[data-theme="dark"] .btn:not(.sec){color:#2a1608}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn:not(.sec){color:#2a1608}}
+.btn:hover{background:var(--brand-deep)}
+.btn:active{transform:scale(.97)}
+.btn.sec{background:var(--card); color:var(--brand); border-color:var(--brand)}
+.btn.sec:hover{background:var(--brand-tint)}
+.btn.gold{background:var(--nav); color:#fff}
+.btn.sm{padding:8px 16px; font-size:14px}
+.btn.block{width:100%; justify-content:center}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; padding:4px 10px; border-radius:9999px;
+  background:var(--card-2); color:var(--muted); border:1px solid var(--line-2)}
+.pill.brand{background:var(--brand-pill); color:var(--brand-deep); border-color:transparent}
+.pill.gold{background:var(--gold-tint); color:var(--warn); border-color:transparent}
+.pill.ok{background:transparent; color:var(--ok); border-color:var(--ok)}
+.pill.warn{background:transparent; color:var(--warn); border-color:var(--warn)}
+.stat{display:grid; gap:2px}
+.stat .num{font-size:26px; font-weight:300; letter-spacing:-.26px; line-height:1.2}
+.icon{width:18px; height:18px; vertical-align:-3.5px}
+.i-lg{width:22px; height:22px}
+.dir-icon{transform:scaleX(1)}
+html[dir="ltr"] .dir-icon{transform:scaleX(-1)}
+.note{background:var(--card-2); border-inline-start:3px solid var(--gold); border-radius:var(--r-s); padding:11px 13px; font-size:14px}
+.note p:last-child{margin:0}
+
+/* bars */
+.bar{height:8px; border-radius:999px; background:var(--line-2); overflow:hidden}
+.bar>span{display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--brand),var(--brand-2)); transition:width .5s cubic-bezier(.2,.7,.3,1)}
+.bar.thin{height:6px}
+.bar>span[data-tone="warn"]{background:var(--gold)}
+.bar>span[data-tone="low"]{background:var(--bad)}
+.barline{display:grid; gap:6px; margin-bottom:12px}
+.barline .lab{display:flex; justify-content:space-between; gap:10px; font-size:14px}
+
+/* ring */
+.ring{position:relative; width:132px; height:132px; flex:none}
+.ring svg{transform:rotate(-90deg)}
+html[dir="rtl"] .ring svg{transform:rotate(-90deg) scaleY(-1)}
+.ring .val{position:absolute; inset:0; display:grid; place-content:center; text-align:center}
+.ring .val b{font-size:27px; font-weight:600; display:block; line-height:1.1}
+.ring .val small{font-size:11.5px}
+
+/* form */
+label.fl{display:block; font-size:13.5px; color:var(--muted); margin:14px 0 5px}
+input[type=text],input[type=number],input[type=email],input[type=password],select,textarea{
+  width:100%; padding:9px 12px; border:1px solid #d9d2c6; border-radius:var(--r-s); background:var(--card);
+  transition:border-color var(--t), box-shadow var(--t)}
+input:focus,select:focus,textarea:focus{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-tint); outline:none}
+textarea{min-height:110px; line-height:1.7}
+.check{display:flex; gap:10px; align-items:center; padding:9px 11px; border:1px solid var(--line); border-radius:var(--r-m); cursor:pointer; transition:background var(--t)}
+.check:hover{background:var(--card-2)}
+.err{color:var(--bad); font-size:13.5px; min-height:20px}
+.chip{background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 13px; cursor:pointer; font-size:14px; transition:all var(--t)}
+.chip[data-on="1"]{background:var(--brand); color:#fff; border-color:var(--brand)}
+.skill-chip{display:grid; gap:5px; min-width:150px; padding:9px 12px; border:1px solid var(--line); border-radius:var(--r-m);
+  background:var(--card); cursor:pointer; text-align:start; transition:border-color var(--t), transform var(--t)}
+.skill-chip:hover{border-color:var(--brand-2)}
+.skill-chip:active{transform:scale(.98)}
+.skill-chip .t{display:flex; justify-content:space-between; gap:8px; font-size:13.5px}
+
+/* steps / timeline */
+.stepper{display:flex; gap:6px; align-items:center; margin-bottom:6px}
+.stepper i{height:5px; flex:1; border-radius:999px; background:var(--line-2); transition:background var(--t)}
+.stepper i[data-on="1"]{background:var(--brand)}
+.phase{display:grid; grid-template-columns:auto 1fr; gap:14px}
+.phase-rail{display:grid; justify-items:center}
+.phase-rail .n{width:34px; height:34px; border-radius:50%; display:grid; place-content:center; font-size:13px; font-weight:600;
+  background:var(--card-2); color:var(--muted); border:1px solid var(--line)}
+.phase-rail .n[data-done="1"]{background:var(--brand); color:#fff; border-color:transparent}
+.phase-rail .line{width:2px; flex:1; background:var(--line); min-height:18px; margin-block:4px}
+.task{display:flex; gap:12px; align-items:flex-start; padding:11px 12px; border:1px solid var(--line); border-radius:var(--r-m);
+  background:var(--card); transition:background var(--t), border-color var(--t)}
+.task:hover{border-color:var(--brand-2)}
+.box{width:20px; height:20px; flex:none; margin-top:3px; border-radius:6px; border:1.8px solid var(--line); background:var(--card);
+  display:grid; place-content:center; cursor:pointer; transition:all var(--t)}
+.box[data-s="in_progress"]{border-color:var(--gold); background:var(--gold-tint)}
+.box[data-s="done"]{border-color:var(--brand); background:var(--brand)}
+.box svg{width:13px; height:13px; color:#fff; opacity:0; transition:opacity var(--t)}
+.box[data-s="done"] svg{opacity:1; color:var(--card)}
+.task[data-done="1"] .tt{color:var(--muted); text-decoration:line-through}
+
+/* ai card */
+.ai{background:#1c1e54; color:#f1f5fd; border:1px solid rgba(83,58,253,.32); border-radius:var(--r-l); padding:22px; box-shadow:0 8px 24px rgba(13,37,61,.14)}
+:root[data-theme="dark"] .ai{background:#131d33; border-color:rgba(123,115,255,.3)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ai{background:#131d33; border-color:rgba(123,115,255,.3)}}
+.ai .hd{display:flex; align-items:center; gap:8px; color:#ffffff; font-weight:600}
+.ai .cap{color:#94a3b8}
+.ai .pipe .p{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.14); color:#cbd5e1}
+.ai .pipe .p:last-child{background:rgba(83,58,253,.4); border-color:var(--brand); color:#ffffff}
+.ai .pipe .ch{color:#64748d}
+.reveal{animation:fade .4s ease both}
+@keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+
+/* empty / skeleton */
+.empty{text-align:center; padding:28px 16px}
+.empty .art{width:150px; max-width:55%; margin:0 auto 8px; display:block}
+.skel{height:12px; border-radius:6px; background:linear-gradient(90deg,var(--line-2),var(--card-2),var(--line-2)); background-size:200% 100%; animation:sh 1.3s linear infinite; margin:9px 0}
+@keyframes sh{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* cv */
+.cvsheet{background:#fff; color:#10130f; border:1px solid var(--line); border-radius:var(--r-m); padding:26px; line-height:1.75; font-size:14.5px}
+.cvsheet h2,.cvsheet h3{color:#10130f}
+.cvsheet h3{font-size:14px; margin:16px 0 4px; border-bottom:1px solid #d9ded7; padding-bottom:3px}
+@media print{ .side,.topbar,.tabbar,.side-veil,.no-print,footer{display:none !important} .page{padding:0; max-width:none} .cvsheet{border:0; padding:0} body{background:#fff} }
+
+/* mobile nav */
+.tabbar{display:none}
+@media(max-width:900px){
+  .tabbar{display:flex; position:fixed; inset-inline:0; bottom:0; z-index:60; background:rgba(255,255,255,.94); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-top:1px solid var(--line)}
+  :root[data-theme="dark"] .tabbar{background:rgba(19,29,51,.94)}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabbar{background:rgba(19,29,51,.94)}}
+  .tabbar button{flex:1; display:grid; justify-items:center; gap:3px; background:none; border:0; padding:8px 2px 10px;
+    color:var(--muted); font-size:10.5px; cursor:pointer}
+  .tabbar svg{width:21px; height:21px}
+  .tabbar button[aria-current="page"]{color:var(--brand); font-weight:500}
+  .tabbar button[aria-current="page"] svg{color:var(--brand)}
+  .tabbar button.tab-more{display:flex; align-items:center; justify-content:center}
+  .tabbar button.active{color:var(--brand); font-weight:500}
+  .tabbar button.active svg{color:var(--brand)}
+}
+.veil{position:fixed; inset:0; background:rgba(8,24,40,.52); display:grid; place-items:center; padding:14px; z-index:50}
+.modal{background:var(--card); border-radius:var(--r-xl); max-width:540px; width:100%; padding:22px; box-shadow:var(--sh-2)}
+.sheet{background:var(--card); border-radius:var(--r-xl) var(--r-xl) 0 0; width:100%; max-width:560px; padding:16px; align-self:end; margin-bottom:54px; max-height:calc(85dvh - 54px); overflow-y:auto}
+.sheet button{display:flex; gap:10px; align-items:center; width:100%; text-align:start; padding:13px 10px; background:none;
+  border:0; border-bottom:1px solid var(--line-2); cursor:pointer; font-size:15.5px}
+.toast{position:fixed; inset-inline:0; bottom:92px; margin-inline:auto; width:max-content; max-width:88%; background:var(--brand);
+  color:#fff; padding:11px 18px; border-radius:999px; z-index:60; font-size:14.5px; box-shadow:var(--sh-2)}
+.scroll-x{overflow-x:auto}
+.mesh-host{position:relative; overflow:hidden}
+.hero-stats{display:flex; flex-wrap:wrap; gap:26px; margin-top:18px}
+.hero-stats b{display:block; font-size:26px; font-weight:300; letter-spacing:-.26px; line-height:1.1}
+.hero-stats span{font-size:13px; color:var(--muted)}
+.path-card{background:var(--card); border:1px solid var(--line); border-radius:var(--r-l); padding:20px;
+  box-shadow:var(--sh); transition:transform var(--t), box-shadow var(--t), border-color var(--t)}
+.path-card:hover{transform:translateY(-2px); box-shadow:var(--sh-2); border-color:rgba(83,58,253,.35)}
+.path-card .track{display:block; margin-bottom:12px}
+.orgs{display:grid; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); gap:10px}
+.org-tile{border:1px solid var(--line); border-radius:var(--r-m); background:var(--card); padding:14px 10px;
+  text-align:center; font-size:13.5px; color:var(--muted); line-height:1.5; transition:color var(--t), border-color var(--t), box-shadow var(--t)}
+.org-tile:hover{color:var(--text); border-color:rgba(83,58,253,.35); box-shadow:var(--sh)}
+.mesh{position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}
+.mesh-host > *:not(.mesh){position:relative; z-index:1}
+:root[data-theme="dark"] .mesh{opacity:.42}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mesh{opacity:.42}}
+html[dir="rtl"] .flip-dir{transform:scaleX(-1)}
+.art-side{max-width:168px; flex:none}
+img.art{border-radius:var(--r-l); object-fit:cover; aspect-ratio:16/10; background:var(--card-2)}
+img.art-side{aspect-ratio:4/3}
+@media(max-width:760px){.art-side{display:none}}
+.journey{display:flex; align-items:flex-start; overflow-x:auto; padding:4px 0; scrollbar-width:none}
+.journey::-webkit-scrollbar{display:none}
+.jstage{display:grid; justify-items:center; gap:6px; text-align:center; min-width:78px; flex:0 0 auto}
+.jstage .bub{width:44px; height:44px; border-radius:14px; display:grid; place-content:center; background:var(--card-2);
+  color:var(--muted); border:1px solid var(--line); transition:all var(--t)}
+.jstage .bub svg{width:21px; height:21px}
+.jstage[data-s="done"] .bub{background:var(--brand); color:var(--card); border-color:transparent}
+.jstage[data-s="now"] .bub{background:var(--brand-tint); color:var(--brand-ink); border-color:var(--brand); box-shadow:0 0 0 4px var(--brand-tint)}
+.jstage span{font-size:12px; color:var(--muted)}
+.jstage[data-s="now"] span,.jstage[data-s="done"] span{color:var(--text)}
+.jline{flex:1 1 14px; min-width:14px; height:2px; margin-top:21px; background:var(--line); border-radius:2px}
+.jline[data-on="1"]{background:var(--brand)}
+.pipe{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:12px}
+.pipe .p{display:flex; gap:6px; align-items:center; background:var(--card); border:1px solid var(--line);
+  border-radius:9px; padding:5px 9px; font-size:12.5px; color:var(--muted)}
+.pipe .p svg{width:14px; height:14px}
+.pipe .p:last-child{border-color:var(--brand); color:var(--brand-ink); background:var(--brand-tint)}
+.pipe .ch{width:13px; height:13px; color:var(--muted); flex:none}
+.bridge{display:grid; gap:8px}
+.bridge svg{width:100%; height:auto; max-height:132px}
+
+/* auth gate */
+.auth-shell{display:flex; min-height:100vh; width:100%; background:var(--bg)}
+.auth-panel{flex:0 0 460px; width:460px; max-width:100%; display:flex; flex-direction:column; justify-content:space-between;
+  padding:36px 36px; background:var(--card); border-inline-end:1px solid var(--line); box-shadow:var(--sh-2); z-index:2; overflow-y:auto}
+.auth-visual{flex:1 1 0%; min-width:0; background-image:url('assets/photo_2026-09-08_00-52-45.jpg');
+  background-size:cover; background-position:center center; background-repeat:no-repeat; position:relative}
+:root[data-theme="dark"] .auth-visual::after{content:""; position:absolute; inset:0; background:rgba(11,19,36,.38); pointer-events:none}
+.auth-hd{display:flex; justify-content:space-between; align-items:center; margin-bottom:28px}
+.auth-body{flex:1; display:flex; flex-direction:column; justify-content:center}
+.auth-title{margin:0 0 6px; font-size:24px; font-weight:600}
+.auth-sub{margin:0 0 16px; color:var(--muted); font-size:14px; line-height:1.5}
+.auth-tabs{display:flex; background:var(--card-2); border:1px solid var(--line); border-radius:var(--r-m); padding:3px; gap:4px; margin:4px 0 16px}
+.auth-tab{flex:1; border:0; background:transparent; padding:8px 12px; border-radius:var(--r-s); font-size:13.5px; font-weight:500; color:var(--muted); cursor:pointer; transition:all var(--t)}
+.auth-tab.active{background:var(--card); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.auth-form{display:grid}
+.auth-switch{margin-top:16px; text-align:center; font-size:13.5px; color:var(--muted)}
+.link-btn{background:none; border:0; color:var(--brand-2); font-size:13.5px; font-weight:500; cursor:pointer; text-decoration:underline; padding:0 4px}
+.link-btn:hover{color:var(--brand-deep)}
+.auth-foot{margin-top:28px; padding-top:16px; border-top:1px solid var(--line-2)}
+.pill-badge{display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); background:var(--card-2); border:1px solid var(--line); border-radius:9999px; padding:6px 12px; line-height:1.4}
+.pill-badge svg{width:14px; height:14px; flex:none; color:var(--ok)}
+@media (max-width:900px){
+  .auth-shell{flex-direction:column; min-height:100vh}
+  .auth-visual{flex:none; height:180px; width:100%; order:-1}
+  .auth-panel{flex:1; width:100%; max-width:100%; padding:24px 20px 32px; border-inline-end:none}
+  .auth-hd{margin-bottom:18px}
+  .auth-title{font-size:22px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <symbol id="logo-masari" viewBox="0 0 240 230">
+   <g fill="var(--brand-ink)">
+     <rect x="101.0" y="197.0" width="75.0" height="9.0" rx="1.6"/>
+     <rect x="112.6" y="189.9" width="67.0" height="8.8" rx="1.6"/>
+     <rect x="118.0" y="182.8" width="65.1" height="8.6" rx="1.6"/>
+     <rect x="122.2" y="175.7" width="64.2" height="8.4" rx="1.6"/>
+     <rect x="125.8" y="168.6" width="63.7" height="8.2" rx="1.6"/>
+     <rect x="129.1" y="161.5" width="63.3" height="8.0" rx="1.6"/>
+     <rect x="132.0" y="154.4" width="63.0" height="7.8" rx="1.6"/>
+     <rect x="134.8" y="147.3" width="62.5" height="7.6" rx="1.6"/>
+     <rect x="137.4" y="140.2" width="61.7" height="7.4" rx="1.6"/>
+     <rect x="139.8" y="133.1" width="60.7" height="7.2" rx="1.6"/>
+     <rect x="142.1" y="126.0" width="59.3" height="7.0" rx="1.6"/>
+     <rect x="144.3" y="118.9" width="57.6" height="6.8" rx="1.6"/>
+     <rect x="146.4" y="111.7" width="55.5" height="6.6" rx="1.6"/>
+     <rect x="148.5" y="104.6" width="53.0" height="6.4" rx="1.6"/>
+     <rect x="150.5" y="97.5" width="50.0" height="6.2" rx="1.6"/>
+     <rect x="152.4" y="90.4" width="46.7" height="6.0" rx="1.6"/>
+     <rect x="154.2" y="83.3" width="43.0" height="5.8" rx="1.6"/>
+     <rect x="156.0" y="76.2" width="39.0" height="5.6" rx="1.6"/>
+     <rect x="157.8" y="69.1" width="34.6" height="5.4" rx="1.6"/>
+     <rect x="159.5" y="62.0" width="30.0" height="5.2" rx="1.6"/>
+     <rect x="161.2" y="54.9" width="25.2" height="5.0" rx="1.6"/>
+     <rect x="162.8" y="47.8" width="20.2" height="4.8" rx="1.6"/>
+     <rect x="164.4" y="40.7" width="15.1" height="4.6" rx="1.6"/>
+     <rect x="166.0" y="33.6" width="10.0" height="4.4" rx="1.6"/>
+     <path d="M52 208h126l-10 10H40z"/>
+     <circle cx="86" cy="150" r="11"/>
+     <path d="M95 148c4 0 5 2 5 4s-2 4-5 4z"/>
+     <path d="M74 176c0-8 5-14 12-14s12 6 12 14v14c0 7-4 11-12 11s-12-4-12-11z"/>
+     <path d="M77 194h7v14h-7zM89 194h7v14h-7z"/>
+   </g>
+   <path d="M158 20l40-14v46l-40-8z" fill="var(--gold)"/>
+   <path d="M158 20l10 4v30l-10-2z" fill="var(--gold)" opacity=".55"/>
+ </symbol>
+</defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <symbol id="i-mark" viewBox="0 0 32 32"><path d="M3 28 L9 18 L15 28 Z" fill="currentColor"/><path d="M11 20 L17 10 L23 20 Z" fill="currentColor" opacity=".7"/><path d="M19 12 L24.5 2 L30 12 Z" fill="currentColor" opacity=".42"/></symbol>
+ <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></symbol>
+ <symbol id="i-skills" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></symbol>
+ <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19h4v-5h5V9h5V4"/><circle cx="4" cy="19" r="1.6" fill="currentColor"/><circle cx="18" cy="4" r="1.6" fill="currentColor"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+ <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h5"/></symbol>
+ <symbol id="i-case" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5h6v2M3 12h18"/></symbol>
+ <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a4 4 0 0 0 6 .5l2-2a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 11a4 4 0 0 0-6-.5l-2 2A4 4 0 0 0 11.7 18l1-1"/></symbol>
+ <symbol id="i-org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-5h6v5M9 11h1M14 11h1"/></symbol>
+ <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M8 8h7M8 12h7"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+ <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></symbol>
+ <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4.5 12.5l5 5L20 6.5"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v6M12 16.4v.4"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.4l3.4 2"/></symbol>
+ <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4v16M6 20h12M4 9h16M4 9l-2 5h4zM20 9l2 5h-4z"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.6l2.5 5.3 5.5.8-4 4 .9 5.7L12 16.7 7.1 19.4l.9-5.7-4-4 5.5-.8z"/></symbol>
+ <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M15 5l-7 7 7 7"/></symbol>
+ <symbol id="i-more" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+ <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.6 6.6 12 13l8.4-6.4"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="il-empty" viewBox="0 0 200 120"><path d="M8 96c28-22 46 4 68-8s34-30 60-22 40 26 56 30" fill="none" stroke="var(--line)" stroke-width="3"/><path d="M120 86V44" stroke="var(--brand)" stroke-width="3"/><path d="M120 44l30 9-30 9z" fill="var(--accent)"/><circle cx="120" cy="90" r="5" fill="var(--brand)"/></symbol>
+ <symbol id="il-hero" viewBox="0 0 420 200">
+   <rect width="420" height="200" rx="16" fill="var(--brand-tint)"/>
+   <circle cx="340" cy="52" r="26" fill="var(--accent)" opacity=".28"/>
+   <g fill="var(--brand)"><path d="M40 96h74v70H40z"/><path d="M40 96l9-12 9 12 9-12 9 12 9-12 9 12 9-12 9 12 9-12 9 12z"/>
+   <path d="M126 76h52v90h-52z"/><path d="M126 76l9-12 9 12 9-12 9 12 9-12 9 12z"/>
+   <path d="M190 110h74v56h-74z"/><path d="M190 110l9-11 9 11 9-11 9 11 9-11 9 11 9-11 9 11z"/></g>
+   <g fill="var(--accent)"><rect x="60" y="124" width="12" height="26" rx="3"/><rect x="84" y="124" width="12" height="26" rx="3"/><rect x="144" y="104" width="12" height="30" rx="3"/><rect x="212" y="134" width="12" height="22" rx="3"/>
+   <rect x="286" y="152" width="26" height="14" rx="3"/><rect x="316" y="132" width="26" height="34" rx="3"/><rect x="346" y="112" width="26" height="54" rx="3"/><path d="M372 110l13-20 13 20z"/></g>
+   <rect x="24" y="166" width="372" height="3" fill="var(--line)"/>
+ </symbol>
+ <symbol id="il-portfolio" viewBox="0 0 200 130"><rect width="200" height="130" rx="12" fill="var(--card-2)"/><rect x="30" y="26" width="64" height="46" rx="8" fill="var(--brand)" opacity=".8"/><rect x="106" y="26" width="64" height="46" rx="8" fill="var(--line)"/><rect x="30" y="84" width="140" height="9" rx="4.5" fill="var(--line)"/><rect x="30" y="100" width="86" height="9" rx="4.5" fill="var(--accent)" opacity=".7"/></symbol>
+ <symbol id="il-privacy" viewBox="0 0 200 130"><rect width="200" height="130" rx="12" fill="var(--card-2)"/><path d="M100 20l38 15v30c0 25-16 42-38 50-22-8-38-25-38-50V35z" fill="var(--brand)"/><rect x="89" y="66" width="22" height="20" rx="5" fill="var(--accent)"/><path d="M93 66v-6a7 7 0 0 1 14 0v6" fill="none" stroke="var(--accent)" stroke-width="4"/></symbol>
+
+ <symbol id="il-hero-paths" viewBox="0 0 440 220">
+   <rect width="440" height="220" rx="18" fill="var(--brand-tint)"/>
+   <path d="M40 170c0-16 11-28 24-28s24 12 24 28z" fill="var(--brand)"/>
+   <circle cx="64" cy="122" r="14" fill="var(--brand)"/>
+   <path d="M38 106l26-11 26 11-26 11z" fill="var(--accent)"/>
+   <path d="M86 112v13" stroke="var(--accent)" stroke-width="3"/>
+   <g fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-dasharray="6 7" opacity=".5">
+     <path d="M98 150C142 146 152 96 186 88"/><path d="M98 156H186"/><path d="M98 162C142 170 154 192 186 194"/>
+   </g>
+   <g>
+     <circle cx="206" cy="88" r="19" fill="var(--card)" stroke="var(--brand)" stroke-width="2"/>
+     <rect x="199" y="79" width="14" height="18" rx="2.5" fill="var(--brand)"/>
+     <path d="M202 84h8M202 88h8M202 92h5" stroke="var(--card)" stroke-width="1.4"/>
+     <circle cx="206" cy="156" r="19" fill="var(--card)" stroke="var(--brand)" stroke-width="2"/>
+     <path d="M197 149h8v14h-8zM207 149h8v14h-8z" fill="var(--brand)"/>
+     <circle cx="206" cy="194" r="19" fill="var(--card)" stroke="var(--brand)" stroke-width="2"/>
+     <rect x="196" y="188" width="20" height="14" rx="3" fill="none" stroke="var(--brand)" stroke-width="2.5"/>
+     <path d="M202 188v-3h8v3" fill="none" stroke="var(--brand)" stroke-width="2.5"/>
+   </g>
+   <g fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-dasharray="6 7" opacity=".5">
+     <path d="M226 92C280 100 300 118 334 130"/><path d="M226 156H334"/><path d="M226 190C280 182 302 168 334 150"/>
+   </g>
+   <circle cx="372" cy="140" r="30" fill="none" stroke="var(--brand)" stroke-width="3"/>
+   <circle cx="372" cy="140" r="18" fill="none" stroke="var(--brand)" stroke-width="3" opacity=".55"/>
+   <circle cx="372" cy="140" r="7" fill="var(--accent)"/>
+   <path d="M372 110V58" stroke="var(--brand)" stroke-width="3"/>
+   <path d="M372 60l34 11-34 11z" fill="var(--accent)"/>
+ </symbol>
+ <symbol id="il-discover" viewBox="0 0 300 180">
+   <rect width="300" height="180" rx="14" fill="var(--card-2)"/>
+   <path d="M52 150c0-15 10-26 22-26s22 11 22 26z" fill="var(--brand)"/>
+   <circle cx="74" cy="108" r="13" fill="var(--brand)"/>
+   <path d="M170 44v108" stroke="var(--brand)" stroke-width="5" stroke-linecap="round"/>
+   <path d="M176 52h64l14 13-14 13h-64z" fill="var(--brand)"/>
+   <path d="M176 88h50l14 13-14 13h-50z" fill="var(--brand)" opacity=".55"/>
+   <path d="M176 124h38l14 13-14 13h-38z" fill="var(--accent)"/>
+   <rect x="30" y="152" width="240" height="3" rx="1.5" fill="var(--line)"/>
+ </symbol>
+ <symbol id="il-cv-doc" viewBox="0 0 220 150">
+   <rect width="220" height="150" rx="14" fill="var(--card-2)"/>
+   <rect x="34" y="16" width="116" height="120" rx="10" fill="var(--card)" stroke="var(--line)"/>
+   <rect x="50" y="32" width="54" height="10" rx="5" fill="var(--brand)"/>
+   <rect x="50" y="52" width="84" height="6" rx="3" fill="var(--line)"/>
+   <rect x="50" y="66" width="84" height="6" rx="3" fill="var(--line)"/>
+   <rect x="50" y="84" width="40" height="7" rx="3.5" fill="var(--accent)" opacity=".8"/>
+   <rect x="50" y="100" width="84" height="6" rx="3" fill="var(--line)"/>
+   <rect x="50" y="114" width="60" height="6" rx="3" fill="var(--line)"/>
+   <circle cx="164" cy="112" r="20" fill="var(--brand)"/>
+   <path d="M155 112l6 7 12-13" fill="none" stroke="var(--card)" stroke-width="3.4" stroke-linecap="round"/>
+ </symbol>
+
+ <symbol id="il-profile-card" viewBox="0 0 240 160">
+   <rect width="240" height="160" rx="14" fill="var(--card-2)"/>
+   <rect x="30" y="22" width="180" height="116" rx="12" fill="var(--card)" stroke="var(--line)"/>
+   <path d="M46 34h148v26H46z" fill="var(--brand)" opacity=".18"/>
+   <circle cx="74" cy="62" r="19" fill="var(--brand)"/>
+   <path d="M62 76c0-7 5-12 12-12s12 5 12 12z" fill="var(--card)" opacity=".35"/>
+   <path d="M58 60c0-11 7-19 16-19s16 8 16 19c0 4-3 6-6 5-2-8-6-11-12-11s-10 4-11 11c-3 1-3-1-3-5z" fill="var(--brand-ink)" opacity=".35"/>
+   <rect x="102" y="54" width="70" height="9" rx="4.5" fill="var(--brand)"/>
+   <rect x="102" y="69" width="52" height="7" rx="3.5" fill="var(--line)"/>
+   <rect x="46" y="92" width="146" height="6" rx="3" fill="var(--line)"/>
+   <rect x="46" y="106" width="104" height="6" rx="3" fill="var(--line)"/>
+   <g><rect x="46" y="120" width="34" height="9" rx="4.5" fill="var(--accent)" opacity=".8"/>
+      <rect x="86" y="120" width="34" height="9" rx="4.5" fill="var(--accent)" opacity=".55"/>
+      <rect x="126" y="120" width="34" height="9" rx="4.5" fill="var(--accent)" opacity=".35"/></g>
+   <circle cx="196" cy="118" r="17" fill="var(--brand)"/>
+   <path d="M188 118l6 6 11-12" fill="none" stroke="var(--card)" stroke-width="3.2" stroke-linecap="round"/>
+ </symbol>
+ <symbol id="il-learning" viewBox="0 0 240 160">
+   <rect width="240" height="160" rx="14" fill="var(--card-2)"/>
+   <rect x="26" y="30" width="120" height="80" rx="10" fill="var(--card)" stroke="var(--line)"/>
+   <path d="M74 56l26 14-26 14z" fill="var(--brand)"/>
+   <rect x="26" y="118" width="120" height="7" rx="3.5" fill="var(--line)"/>
+   <g><rect x="164" y="96" width="52" height="14" rx="4" fill="var(--brand)"/>
+      <rect x="160" y="76" width="60" height="14" rx="4" fill="var(--brand)" opacity=".65"/>
+      <rect x="168" y="56" width="44" height="14" rx="4" fill="var(--accent)"/></g>
+   <circle cx="190" cy="34" r="14" fill="none" stroke="var(--brand)" stroke-width="3"/>
+   <path d="M184 46l6 10 6-10" fill="var(--accent)"/>
+   <rect x="18" y="128" width="204" height="3" rx="1.5" fill="var(--line)"/>
+ </symbol>
+</defs></svg>
+
+<div id="app"></div>
+<div id="overlay"></div>
+
+<script>
+/* ===========================================================================
+   MASARI — مساري،  Career self-assessment, single file, no backend, numbers use Latin digits in both locales (ar-SA-u-nu-latn): Saudi CVs,
+   job portals and HR documents use Latin digits, so the UI matches them, all organization records are placeholders (see §data integrity in guide).
+   =========================================================================== */
+
+const I18N = {
+ar:{ dir:"rtl", htmlLang:"ar", brand:"مساري", tagline:"مسارك، خطوتك القادمة",
+ nav:{home:"الرئيسية", path:"مساري", analysis:"القوة والضعف", skills:"المهارات", plan:"خطة التطوير", tasks:"المهام", cv:"السيرة الذاتية",
+      portfolio:"معرض الأعمال", linkedin:"لينكدإن", opps:"الفرص", profile:"الملف الشخصي",
+      guide:"دليل الاستخدام", sources:"المصادر والخصوصية", settings:"الإعدادات"},
+ grp:{main:"الرحلة", build:"جهّز نفسك", acct:"الحساب"},
+ ui:{lang:"English", theme:"السمة", more:"المزيد", close:"إغلاق", save:"حفظ", edit:"تعديل", del:"حذف",
+     next:"التالي", back:"السابق", of:"من", min:"دقيقة", req:"مطلوب", copy:"نسخ", copied:"نُسخ", view:"عرض", add:"إضافة"},
+ land:{eyebrow:"منصة تطوير مهني للخريجين",
+   h1:"اختر مسارك، واعرف بالضبط ما ينقصك للوصول إليه",
+   sub:"عشر دقائق تكفي لتسمية دور وظيفي واحد، ورؤية فجوة مهاراتك أمامه، والخروج بخطة أسابيع تبدأ اليوم",
+   ctaStart:"ابدأ التقييم", ctaGuide:"كيف يعمل",
+   statPaths:"مسار وظيفي", statOrgs:"جهة ومصدر", statPhases:"مراحل حتى التقديم",
+   pathsTitle:"مسارات وظيفية تستكشفها", pathsSub:"اختر مسارًا لتبدأ منه، وتستطيع تغييره في أي وقت",
+   explore:"استكشف هذا المسار", skillsIn:"من مهاراته الأساسية",
+   orgsTitle:"جهات ومصادر مذكورة داخل المنصة",
+   orgsNote:"أسماء الجهات معروضة كنص، بلا شعارات وبلا أي علاقة شراكة أو رعاية، وبرامجها لم تُتحقق بعد ولذلك لا تُعرض تفاصيلها",
+   journeyTitle:"رحلتك في خمس محطات"},
+ dash:{hi:"مرحبًا", hiNo:"أهلًا بك", sub:"الخطوة القادمة في مسارك تبدأ من هنا", subDone:"خطوة واحدة واضحة اليوم تكفي",
+   path:"المسار المهني", match:"درجة الملاءمة", planProg:"تقدم الخطة", ready:"جاهزية الملف",
+   today:"مهام اليوم", allDone:"لا مهام متبقية اليوم", seeAll:"عرض الكل", none:"—"},
+ path:{title:"مسارك المقترح", found:"وجدنا مسارك الأقرب لك", match:"ملاءمة", why:"لماذا هذا المسار؟",
+   full:"عرض تحليلي الكامل", change:"تغيير المسار", strengths:"نقاط قوتك", gaps:"مهارات تحتاج تطوير",
+   nextStep:"الخطوة التالية", nextBody:"ابدأ بخطة التطوير: مهارتان ناقصتان أولًا، ثم مشروع يُثبتهما", startPlan:"ابدأ خطتي",
+   alts:"مسارات أخرى قريبة منك", pick:"اختر هذا المسار", basis:"كيف حُسبت الملاءمة",
+   basisBody:"الملاءمة = 60% تغطية مهارات الدور + 25% قرب الدور من مجالك الأكاديمي + 15% توافقه مع اهتماماتك، كل رقم هنا محسوب من إجاباتك أنت داخل متصفحك",
+   caveat:"هذه أداة تقدير ذاتي تعتمد على البيانات المُدخلة، وليست تقييمًا من جهة توظيف ولا استشارة من مرشد مهني مرخّص"},
+ sw:{title:"نقاط القوة والضعف", strengths:"نقاط القوة", weaknesses:"ما يحتاج إلى تقوية",
+   sub:"تحليل مبني على إجاباتك أنت: كل بند مكتوب معه سببه وأقرب خطوة تعالجه",
+   noS:"لم نرصد نقطة قوة بعد — ارفع مستوى مهارة وأضف مشروعًا وستظهر هنا",
+   noW:"لا يوجد ما يؤخرك الآن في بياناتك، راجع الخطة وابدأ التقديم",
+   headline:"الخلاصة", strongest:"أبرز قوة", biggest:"أكبر ما يؤخرك", fix:"عالج هذا", copy:"نسخ التحليل",
+   how:"تحليل بقواعد داخل متصفحك من إجاباتك، لا من نموذج لغوي، غيّر أي إجابة وسيتغير التحليل فورًا"},
+ sk:{title:"فجوة المهارات", have:"تمتلكها", dev:"تحتاج تطوير", prio:"أولوية عالية",
+   sub:"اضغط على أي مهارة لتحديث مستواك، ويتغير التحليل فورًا", legend:"✓ تمتلكها، ○ تحتاج إلى تطوير، ★ أولوية عالية",
+   coverage:"تغطية مهارات الدور", noRole:"اختر دورًا مستهدفًا أولًا"},
+ plan:{title:"خطتي للوصول إلى المسار", build:"ابنِ خطتي", rebuild:"إعادة بناء الخطة",
+   p1:"الأساسيات", p2:"المهارات التقنية", p3:"معرض الأعمال", p4:"جاهز للتقديم",
+   phase:"المرحلة", due:"الموعد", overdue:"تجاوز الموعد", empty:"لا خطة بعد، اختر مهاراتك المستهدفة ثم ابنِ خطتك",
+   picks:"مهارات مستهدفة", note:"المواعيد تقديرية، حرّكها متى احتجت إلى ذلك، تأخّر بند لا يعني أن الخطة فشلت",
+   status:{not_started:"لم تبدأ", in_progress:"جارية", done:"منجزة"}},
+ tasks:{title:"مهامي", today:"اليوم", upcoming:"قادم", done:"منجزة", empty:"لا مهام بعد، ابنِ خطتك أولًا",
+   prio:{high:"أولوية عالية", med:"متوسطة", low:"عند التفرغ"}, progress:"أنجزت"},
+ ai:{title:"مساعد مساري", how:"توصية محسوبة داخل متصفحك من إجاباتك — بلا نموذج لغوي وبلا إرسال بيانات",
+   show:"اعرض التوصية", gapLead:"لديك فجوة في", gapTail:"وهي من المهارات الأساسية للدور المختار، ابدأ بها قبل بقية القائمة",
+   cvLead:"سيرتك تنقصها", liLead:"ملف لينكدإن يحتاج", pfLead:"معرض أعمالك فارغ",
+   applyLead:"مهاراتك الأساسية مغطاة", applyBody:"ابدأ التقديم فعليًا، وحسّن أثناء التقديم"},
+ rd:{title:"جاهزية ملفك المهني", cv:"السيرة الذاتية", li:"لينكدإن", pf:"معرض الأعمال",
+   overall:"الجاهزية الكلية", close:"بقيت خطوات قليلة قبل التقديم", far:"أمامك خطوات واضحة لرفع الجاهزية",
+   improve:"تحسين الملف"},
+ cv:{title:"السيرة الذاتية", editor:"المحرر", preview:"معاينة مباشرة", ats:"جاهزية أنظمة التتبع",
+   missing:"كلمات مفتاحية ناقصة", sugg:"اقتراحات", improve:"حسّن سيرتي", print:"طباعة أو حفظ PDF",
+   headline:"العنوان المهني", summary:"النبذة", contact:"البريد (يظهر عند الطباعة فقط)",
+   sections:{summary:"نبذة", skills:"المهارات", edu:"التعليم", exp:"الخبرة", proj:"المشاريع"},
+   atsNote:"مخرَج بعمود واحد بعناوين قياسية بلا جداول ولا صور — يقرأه نظام التتبع كما هو"},
+ pf:{title:"معرض الأعمال", add:"إضافة مشروع", name:"اسم المشروع", desc:"وصف قصير",
+   problem:"المشكلة", approach:"ما فعلته", result:"النتيجة", link:"الرابط", skills:"المهارات المستخدمة",
+   empty:"لنبدأ بأول مشروع لك", emptySub:"مشروع واحد واضح أفضل من ثلاثة غامضة"},
+ li:{title:"لينكدإن", score:"تقييم ملفك", headline:"العنوان", about:"النبذة", skills:"المهارات", exp:"الخبرة",
+   good:"جيد", needs:"يحتاج تحسين", apply:"طبّق الاقتراح", suggested:"النص المقترح",
+   addSkills:"أضف ثلاث مهارات على الأقل", net:"رسالة تواصل جاهزة"},
+ op:{title:"الفرص والجهات", search:"ابحث باسم الجهة", type:"النوع", cost:"التكلفة", format:"الصيغة", all:"الكل",
+   disclaimer:"المعلومات إرشادية — تحقق من مصدرها الرسمي قبل التسجيل", demo:"بيانات تجريبية / Demo data",
+   pending:"لم يُدخل بعد من مصدر رسمي", why:"لماذا قد تناسبك", whyPending:"يُكتب بعد ربط الجهة بمصدرها الرسمي",
+   count:"جهة", none:"لا توجد نتائج بهذه المرشحات", reset:"إعادة الضبط", follow:"تابع هذه الجهة", following:"تتابعها",
+   verified:"مصدر موثّق", checked:"تاريخ التحقق", visit:"استعرض الفرص", source:"الموقع الرسمي",
+   applyTitle:"التقديم على البرامج والفرص", applyBody:"برامج تطوير الخريجين والتدريب التعاوني مجمّعة في منصة عَتَبة، راجع الشروط والمواعيد في المنصة نفسها قبل التقديم",
+   note:"أسماء الجهات كما زوّدتنا بها، البرامج والتكاليف والروابط والشروط لم تُتحقق بعد، ولذلك لا تُعرض"},
+ types:{platform:"منصة فرص وتقديم", academy:"أكاديمية أو منصة تدريب", authority:"هيئة مهنية", ministry:"برنامج تابع لوزارة", fund:"صندوق أو جهة تمكين", hackathon:"هاكاثون", org:"منشأة قطاع خاص", research:"جهة بحث وتقنية"},
+ costs:{free:"مجاني", paid:"مدفوع", unknown:"غير معروف"},
+ formats:{online:"عن بُعد", in_person:"حضوري", hybrid:"مدمج", unknown:"غير معروف"},
+ ob:{title:"تقييم المسار", stepOf:"الخطوة", s1:"التعليم", s2:"الخبرة", s3:"المهارات", s4:"الاهتمامات", s5:"السيرة الذاتية", s6:"النتيجة",
+   name:"الاسم", uni:"الجامعة", field:"المجال الأكاديمي", major:"التخصص كما في الشهادة", year:"سنة التخرج",
+   gpa:"المعدل", gpaScale:"من", gpaSkip:"أفضّل عدم الإفصاح",
+   exp:"الخبرة العملية", coop:"أنهيت تدريبًا تعاونيًا أو صيفيًا", courses:"عدد الدورات المكتملة",
+   skillsHint:"اضغط على المهارة لرفع مستواك: 0 ← 25 ← 50 ← 75 ← 100%", role:"الدور المستهدف", dir:"اتجاهك",
+   interests:"ما الذي يهمك؟", presence:"حضورك المهني الحالي",
+   cvUp:"ارفع سيرتك (اختياري)", cvHint:"ملف PDF أو DOCX حتى 5 ميغابايت، يُقرأ داخل متصفحك فقط ولا يُرفع إلى أي خادم",
+   cvPaste:"أو الصق نص سيرتك", cvRead:"قرأنا النص، يُحفظ ما تبقيه أنت فقط", cvFail:"تعذّرت قراءة الملف، الصق النص يدويًا",
+   review:"راجع قبل التحليل", analyze:"حلّل مساري", errField:"اختر المجال الأكاديمي", errYear:"اختر سنة التخرج", errRole:"اختر الدور المستهدف",
+   done:"حُفظ ملفك في هذا المتصفح"},
+ dirs:{stay:"أكمل في تخصصي", transition:"أنتقل لمجال آخر", undecided:"لم أقرر بعد"},
+ exps:{none:"لا توجد", lt6:"أقل من 6 أشهر", m6:"6 إلى 12 شهرًا", y1:"سنة إلى سنتين", y2:"أكثر من سنتين"},
+ pres:{cv:"سيرة ذاتية محدثة", li:"حساب لينكدإن مكتمل", pf:"معرض أعمال أو مشاريع"},
+ an:{title:"جارٍ تحليل مسارك", s1:"قراءة ملفك", s2:"مطابقة المسارات", s3:"تحديد فجوة المهارات", s4:"تجهيز خطتك"},
+ guide:{title:"دليل الاستخدام", lead:"«مساري» يساعدك على تسمية دور وظيفي واحد، ومعرفة ما ينقصك له، وتحديد أول خطوة هذا الأسبوع، كل الحساب يتم داخل متصفحك ويُعرض لك بالكامل",
+   steps:"خمس خطوات، عشرون دقيقة", legend:"معاني الرموز", faq:"أسئلة سريعة", start:"ابدأ من التقييم",
+   notTitle:"ما لا تفعله هذه الأداة", notBody:"لا تعدك بوظيفة، ولا تقيّمك نيابة عن جهة توظيف، ولا تعرض معلومة عن برنامج لم تُتحقق، حين لا نعرف، نقول ذلك"},
+ src:{title:"المصادر والخصوصية", how:"كيف تُستبدل البيانات التجريبية ببيانات موثقة", pref:"المصادر المفضّلة",
+   privacy:"ما الذي يُحفظ عنك", del:"حذف بياناتي", delConfirm:"سيُمسح كل شيء من هذا المتصفح، هل تريد المتابعة؟",
+   deleted:"حُذفت بياناتك", notes:"ملاحظات وحدود هذه النسخة"},
+ consent:{title:"قبل أن نحفظ شيئًا", body:"يُحفظ ما تكتبه في هذا المتصفح فقط (localStorage)، لا حساب، لا خادم، ولا إرسال لأي جهة، ملف سيرتك لا يُحفظ: نقرأ نصه في جهازك ثم نتخلص من الملف، لا نطلب هوية ولا إقامة ولا جوال ولا عنوان، تستطيع حذف كل شيء متى شئت",
+   agree:"موافق، احفظ في متصفحي", cancel:"لا تحفظ"},
+ vis:{liAlt:"بطاقة ملف مهني عليها صورة وعنوان ومهارات وعلامة اكتمال",
+   learnAlt:"شاشة درس ودرجات صاعدة من الشهادات تمثل التعلّم المستمر",
+   journey:"رحلتك المهنية", jp:{profile:"ملفك", skills:"مهاراتك", learning:"التعلّم", portfolio:"أعمالك", career:"التقديم"},
+   heroAlt:"خريج أمام ثلاثة مسارات مهنية تمر بالسيرة الذاتية والتعلّم والوظائف وتنتهي بهدفه",
+   discoverAlt:"شخص أمام لافتة اتجاهات تمثل عدة مسارات مهنية",
+   bridge:"من مستواك إلى متطلبات الدور", now:"مستواك الآن", goal:"متطلبات الدور",
+   bridgeAlt:"درجات تصل بين مستواك الحالي في مهارات الدور وبين متطلباته الكاملة",
+   cvAlt:"مستند سيرة ذاتية بعمود واحد مع علامة اجتياز",
+   dest:"الوجهة", pipe:{a:"بيانات ملفك", b:"تحليل في متصفحك", c:"مطابقة المسار", d:"خطة مخصصة"}},
+ daily:["يومك لا يقاس بعدد التقديمات، بل بخطوة واضحة واحدة","المهارة الناقصة اليوم مهارة تُتعلّم، لا حكم عليك","اقرأ وصفًا وظيفيًا واحدًا بتمعّن، أفضل من عشرين بسرعة","رسالة تواصل واحدة أسبوعيًا تكفي للبداية","لا بأس أن يكون التقدم بطيئًا ما دام مستمرًا","اضبط موعدًا واقعيًا، ثم احترمه","الرفض جزء من العملية، ولا يقيس قيمتك"]
+},
+en:{ dir:"ltr", htmlLang:"en", brand:"Masari", tagline:"Your career, your next move",
+ nav:{home:"Home", path:"My path", analysis:"Strengths", skills:"Skills", plan:"Development plan", tasks:"Tasks", cv:"CV",
+      portfolio:"Portfolio", linkedin:"LinkedIn", opps:"Opportunities", profile:"Profile",
+      guide:"How to use", sources:"Sources & privacy", settings:"Settings"},
+ grp:{main:"The journey", build:"Get ready", acct:"Account"},
+ ui:{lang:"العربية", theme:"Theme", more:"More", close:"Close", save:"Save", edit:"Edit", del:"Delete",
+     next:"Next", back:"Back", of:"of", min:"min", req:"required", copy:"Copy", copied:"Copied", view:"View", add:"Add"},
+ land:{eyebrow:"A career-development platform for graduates",
+   h1:"Choose your path and see exactly what you are missing to reach it",
+   sub:"Ten minutes is enough to name one target role, see your skill gap against it, and leave with a weekly plan that starts today",
+   ctaStart:"Start the assessment", ctaGuide:"How it works",
+   statPaths:"career paths", statOrgs:"organizations and sources", statPhases:"phases before applying",
+   pathsTitle:"Career paths to explore", pathsSub:"Pick one to start from, you can change it at any time",
+   explore:"Explore this path", skillsIn:"core skills include",
+   orgsTitle:"Organizations and sources referenced in the platform",
+   orgsNote:"Names are shown as text, with no logos and no partnership or sponsorship of any kind, and their programmes are unverified so no details are shown",
+   journeyTitle:"Your journey in five stops"},
+ dash:{hi:"Hello", hiNo:"Welcome", sub:"Ready for your next move?", subDone:"Keep going — one step today is enough",
+   path:"Career path", match:"Match score", planProg:"Plan progress", ready:"Profile readiness",
+   today:"Today's tasks", allDone:"Nothing left for today", seeAll:"See all", none:"—"},
+ path:{title:"Your suggested path", found:"We found your closest path", match:"match", why:"Why this path?",
+   full:"See my full analysis", change:"Change path", strengths:"Your strengths", gaps:"Skills to develop",
+   nextStep:"Next step", nextBody:"Start the plan: two missing skills first, then a project that proves them", startPlan:"Start my plan",
+   alts:"Other close paths", pick:"Choose this path", basis:"How the match is calculated",
+   basisBody:"Match = 60% coverage of the role's skills + 25% closeness to your academic field + 15% fit with your interests, every number is computed from your own answers inside your browser",
+   caveat:"A self-assessment based on what you entered, not an employer evaluation or licensed career counselling"},
+ sw:{title:"Strengths and weaknesses", strengths:"Strengths", weaknesses:"Needs strengthening",
+   sub:"Built from your own answers: each item shows its evidence and the nearest step that fixes it",
+   noS:"No strength recorded yet — raise a skill and add a project and they will appear here",
+   noW:"Nothing in your data is holding you back right now, review the plan and start applying",
+   headline:"Summary", strongest:"Strongest point", biggest:"Biggest blocker", fix:"Fix this", copy:"Copy analysis",
+   how:"Rule-based analysis in your browser from your answers, not a language model, change an answer and it updates instantly"},
+ sk:{title:"Skill gap", have:"You have", dev:"To develop", prio:"High priority",
+   sub:"Tap any skill to update your level — the analysis updates instantly", legend:"✓ have, ○ to develop, ★ high priority",
+   coverage:"Role skill coverage", noRole:"Choose a target role first"},
+ plan:{title:"My roadmap to the path", build:"Build my plan", rebuild:"Rebuild plan",
+   p1:"Foundation", p2:"Technical skills", p3:"Portfolio", p4:"Ready to apply",
+   phase:"Phase", due:"Due", overdue:"Past due", empty:"No plan yet, pick your target skills, then build it",
+   picks:"Target skills", note:"Dates are estimates — move them when you need to, A late item is not a failed plan",
+   status:{not_started:"Not started", in_progress:"In progress", done:"Done"}},
+ tasks:{title:"My tasks", today:"Today", upcoming:"Upcoming", done:"Done", empty:"No tasks yet, build your plan first",
+   prio:{high:"High priority", med:"Medium", low:"When free"}, progress:"completed"},
+ ai:{title:"Masari assistant", how:"A recommendation computed in your browser from your answers — no language model, no data sent",
+   show:"Show the recommendation", gapLead:"You have a gap in", gapTail:"which is core to the role you chose, start there before the rest of the list",
+   cvLead:"Your CV is missing", liLead:"Your LinkedIn needs", pfLead:"Your portfolio is empty",
+   applyLead:"Your core skills are covered", applyBody:"Start applying, and keep improving as you go"},
+ rd:{title:"Profile readiness", cv:"CV", li:"LinkedIn", pf:"Portfolio",
+   overall:"Overall readiness", close:"You are close to being ready to apply", far:"Clear steps remain to raise your readiness",
+   improve:"Improve my profile"},
+ cv:{title:"CV", editor:"Editor", preview:"Live preview", ats:"ATS readiness",
+   missing:"Missing keywords", sugg:"Suggestions", improve:"Improve my CV", print:"Print or save as PDF",
+   headline:"Professional headline", summary:"Summary", contact:"Email (shown at print time only)",
+   sections:{summary:"Summary", skills:"Skills", edu:"Education", exp:"Experience", proj:"Projects"},
+   atsNote:"Single column, standard headings, no tables or images — a tracking system reads it as-is"},
+ pf:{title:"Portfolio", add:"Add project", name:"Project name", desc:"Short description",
+   problem:"Problem", approach:"What you did", result:"Result", link:"Link", skills:"Skills used",
+   empty:"Let's start your first project", emptySub:"One clear project beats three vague ones"},
+ li:{title:"LinkedIn", score:"Profile score", headline:"Headline", about:"About", skills:"Skills", exp:"Experience",
+   good:"Good", needs:"Needs improvement", apply:"Apply suggestion", suggested:"Suggested text",
+   addSkills:"Add at least three skills", net:"Ready outreach message"},
+ op:{title:"Opportunities and organizations", search:"Search by organization", type:"Type", cost:"Cost", format:"Format", all:"All",
+   disclaimer:"Guidance only — verify with the official source before you register", demo:"بيانات تجريبية / Demo data",
+   pending:"Not yet entered from an official source", why:"Why it may fit you", whyPending:"Written once the organization is linked to its official source",
+   count:"organizations", none:"No results with these filters", reset:"Reset", follow:"Follow", following:"Following",
+   verified:"Verified source", checked:"Verified on", visit:"Browse opportunities", source:"Official site",
+   applyTitle:"Applying to programmes and opportunities", applyBody:"Graduate-development and co-op training programmes are gathered on the Atabah platform, check requirements and dates on the platform itself before applying",
+   note:"Organization names are as supplied, programmes, costs, links and requirements are unverified and therefore hidden"},
+ types:{platform:"Opportunities platform", academy:"Academy or training platform", authority:"Professional authority", ministry:"Ministry programme", fund:"Fund or enabler", hackathon:"Hackathon", org:"Private-sector organization", research:"Research and technology body"},
+ costs:{free:"Free", paid:"Paid", unknown:"Unknown"},
+ formats:{online:"Online", in_person:"In person", hybrid:"Hybrid", unknown:"Unknown"},
+ ob:{title:"Career assessment", stepOf:"Step", s1:"Education", s2:"Experience", s3:"Skills", s4:"Interests", s5:"CV", s6:"Results",
+   name:"Name", uni:"University", field:"Academic field", major:"Major as on your degree", year:"Graduation year",
+   gpa:"GPA", gpaScale:"out of", gpaSkip:"Prefer not to say",
+   exp:"Work experience", coop:"I completed a co-op or summer training", courses:"Courses completed",
+   skillsHint:"Tap a skill to raise your level: 0 → 25 → 50 → 75 → 100%", role:"Target role", dir:"Your direction",
+   interests:"What interests you?", presence:"Your professional presence today",
+   cvUp:"Upload your CV (optional)", cvHint:"PDF or DOCX up to 5 MB, read in your browser only, never uploaded",
+   cvPaste:"Or paste your CV text", cvRead:"Text read, only what you keep is stored", cvFail:"Could not read the file, paste the text instead",
+   review:"Review before analysis", analyze:"Analyse my path", errField:"Choose your academic field", errYear:"Choose your graduation year", errRole:"Choose a target role",
+   done:"Saved in this browser"},
+ dirs:{stay:"Stay in my specialization", transition:"Move to another field", undecided:"Undecided"},
+ exps:{none:"None", lt6:"Under 6 months", m6:"6–12 months", y1:"1–2 years", y2:"Over 2 years"},
+ pres:{cv:"An up-to-date CV", li:"A complete LinkedIn profile", pf:"A portfolio or projects"},
+ an:{title:"Analysing your path", s1:"Reading your profile", s2:"Matching career paths", s3:"Identifying skill gaps", s4:"Generating your roadmap"},
+ guide:{title:"How to use Masari", lead:"Masari helps you name one target role, see what you are missing for it, and pick a first step for this week, everything is computed in your browser and shown to you in full",
+   steps:"Five steps, twenty minutes", legend:"What the symbols mean", faq:"Quick questions", start:"Start the assessment",
+   notTitle:"What this tool does not do", notBody:"It does not promise you a job, it does not assess you on an employer's behalf, and it never shows an unverified programme detail, when we don't know, we say so"},
+ src:{title:"Sources and privacy", how:"How a maintainer replaces demo data with verified entries", pref:"Preferred sources",
+   privacy:"What is stored about you", del:"Delete my data", delConfirm:"Everything will be cleared from this browser, continue?",
+   deleted:"Your data was deleted", notes:"Notes and limits of this build"},
+ consent:{title:"Before anything is saved", body:"What you type is saved in this browser only (localStorage), no account, no server, nothing sent anywhere, your CV file is never stored: its text is read on your device and the file is discarded, we never ask for national ID, Iqama, phone or address, you can delete everything at any time",
+   agree:"Save in my browser", cancel:"Don't save"},
+ vis:{liAlt:"A professional profile card with a photo, headline, skills and a completion mark",
+   learnAlt:"A lesson screen and rising certificate steps representing continuous learning",
+   journey:"Your career journey", jp:{profile:"Profile", skills:"Skills", learning:"Learning", portfolio:"Portfolio", career:"Applying"},
+   heroAlt:"A graduate facing three career paths that pass through CV, learning and jobs and end at a goal",
+   discoverAlt:"A person at a signpost representing several career paths",
+   bridge:"From your level to the role's requirements", now:"Your level now", goal:"Role requirements",
+   bridgeAlt:"Steps bridging your current level in the role's skills and its full requirements",
+   cvAlt:"A single-column CV document with a pass mark",
+   dest:"Destination", pipe:{a:"Your profile data", b:"Analysis in your browser", c:"Path match", d:"Personal roadmap"}},
+ daily:["Your day is measured by one clear step, not by application count","A missing skill today is a skill to learn, not a verdict","Read one job description closely rather than twenty quickly","One outreach message a week is enough to start","Slow progress is fine as long as it continues","Set a realistic date, then keep it","Rejection is part of the process and not a measure of you"]
+}};
+
+/* ------------------------- data (all placeholders) ------------------------ */
+const P = (id,ar,en,type)=>({id, nameAr:ar, nameEn:en, type, providerAr:ar, providerEn:en,
+  status:"placeholder", sourceUrl:null, verifiedAt:null, cost:{type:"unknown", amountSar:null},
+  format:"unknown", level:"unknown", durationWeeks:null, purposeAr:null, purposeEn:null});
+const ATABAH = {
+  id:"atabah", nameAr:"عَتَبة", nameEn:"Atabah", type:"platform",
+  providerAr:"عَتَبة", providerEn:"Atabah",
+  status:"verified", sourceUrl:"https://3atabah.com", browseUrl:"https://go.3atabah.com", verifiedAt:"2026-09-02",
+  cost:{type:"unknown", amountSar:null}, format:"online", level:"unknown", durationWeeks:null,
+  purposeAr:"منصة تجمع برامج تطوير الخريجين والتدريب التعاوني من الجهات الحكومية والخاصة في مكان واحد",
+  purposeEn:"A platform gathering graduate-development and co-op training programmes from public and private bodies in one place"
+};
+const ENTITIES = [ATABAH,
+  P("hadaf","هدف — صندوق تنمية الموارد البشرية","Hadaf","fund"),
+  P("misk","مسك","Misk","fund"), P("monshaat","منشآت","Monsha'at","fund"),
+  P("sdaia","سدايا","SDAIA","research"), P("tuwaiq","أكاديمية طويق","Tuwaiq Academy","academy"),
+  P("satr","منصة سطر","Satr Platform","academy"), P("apple-academy","أكاديمية أبل","Apple Academy","academy"),
+  P("financial-academy","الأكاديمية المالية","The Financial Academy","academy"),
+  P("neom-academy","أكاديمية نيوم","NEOM Academy","academy"),
+  P("kacst","مدينة الملك عبدالعزيز للعلوم والتقنية","KACST","research"),
+  P("waed","برنامج واعد","Waed Programme","fund"), P("pif","صندوق الاستثمارات العامة","Public Investment Fund","fund"),
+  P("nahdi","النهدي","Nahdi","org"),
+  P("m-energy","البرامج التطويرية — وزارة الطاقة","Development programmes — Ministry of Energy","ministry"),
+  P("m-hajj","البرامج التطويرية — وزارة الحج والعمرة","Development programmes — Ministry of Hajj and Umrah","ministry"),
+  P("m-health","البرامج التطويرية — وزارة الصحة","Development programmes — Ministry of Health","ministry"),
+  P("m-culture","البرامج التطويرية — وزارة الثقافة","Development programmes — Ministry of Culture","ministry"),
+  P("a-engineers","الهيئة السعودية للمهندسين","Saudi Council of Engineers","authority"),
+  P("a-health","الهيئة السعودية للتخصصات الصحية","Saudi Commission for Health Specialties","authority"),
+  P("a-lawyers","الهيئة السعودية للمحامين","Saudi Bar Association","authority"),
+  P("a-ip","الهيئة السعودية للملكية الفكرية","Saudi Authority for Intellectual Property","authority"),
+  P("a-accountants","الهيئة السعودية للمحاسبين","Saudi Organization for Chartered and Professional Accountants","authority"),
+  P("a-water","الهيئة السعودية للمياه","Saudi Water Authority","authority"),
+  P("a-cyber","الهيئة السعودية للأمن السيبراني والدرونز","Saudi body for cybersecurity and drones","authority"),
+  P("a-industrial","الهيئة العليا للأمن الصناعي","High Commission for Industrial Security","authority"),
+  P("h-health","هاكاثون وزارة الصحة","Ministry of Health hackathon","hackathon"),
+  P("h-culture","هاكاثون وزارة الثقافة","Ministry of Culture hackathon","hackathon"),
+  P("h-hajj","هاكاثون وزارة الحج والعمرة","Ministry of Hajj and Umrah hackathon","hackathon"),
+  P("h-energy","هاكاثون وزارة الطاقة","Ministry of Energy hackathon","hackathon")
+];
+const FIELDS = [
+  {id:"cs",ar:"حاسب وتقنية معلومات",en:"Computing and IT"},{id:"eng",ar:"هندسة",en:"Engineering"},
+  {id:"biz",ar:"إدارة وأعمال",en:"Business and management"},{id:"fin",ar:"مالية ومحاسبة",en:"Finance and accounting"},
+  {id:"health",ar:"صحة",en:"Health"},{id:"law",ar:"قانون",en:"Law"},{id:"sci",ar:"علوم",en:"Science"},
+  {id:"design",ar:"تصميم وفنون",en:"Design and arts"},{id:"edu",ar:"تعليم",en:"Education"},{id:"other",ar:"غير ذلك",en:"Other"}
+];
+const S=(id,ar,en,core)=>({id,ar,en,core:!!core});
+const ROLES = [
+ {id:"business-analyst", field:"biz", ar:"محلل أعمال", en:"Business Analyst", tags:["i-data","i-numbers","i-people"],
+  skills:[S("excel","Excel المتقدم","Advanced Excel",1),S("sql","SQL","SQL",1),S("powerbi","Power BI","Power BI",1),
+    S("python","Python","Python"),S("reqs","تحليل المتطلبات","Requirements analysis",1),
+    S("process","نمذجة العمليات","Process modelling"),S("story","عرض النتائج للمسؤول","Presenting to decision-makers",1)]},
+ {id:"data-analyst", field:"cs", ar:"محلل بيانات", en:"Data Analyst", tags:["i-data","i-numbers"],
+  skills:[S("excel","Excel المتقدم","Advanced Excel",1),S("sql","SQL","SQL",1),S("viz","تصور البيانات","Data visualization",1),
+    S("stats","إحصاء تطبيقي","Applied statistics"),S("python","Python","Python",1),S("story","عرض النتائج","Presenting results")]},
+ {id:"swe", field:"cs", ar:"مطور برمجيات", en:"Software Developer", tags:["i-tech"],
+  skills:[S("prog","لغة برمجة بعمق","One language in depth",1),S("git","Git","Git",1),S("web","أساسيات الويب","Web fundamentals",1),
+    S("db","قواعد البيانات","Databases"),S("test","الاختبارات","Testing"),S("algo","هياكل البيانات","Data structures",1)]},
+ {id:"cyber", field:"cs", ar:"محلل أمن سيبراني", en:"Cybersecurity Analyst", tags:["i-tech","i-public"],
+  skills:[S("net","الشبكات","Networking",1),S("os","أنظمة التشغيل","Operating systems",1),S("siem","مراقبة الأحداث","Security monitoring",1),
+    S("risk","تقييم المخاطر","Risk assessment"),S("script","البرمجة النصية","Scripting"),S("gov","الضوابط والسياسات","Controls and policy")]},
+ {id:"ux", field:"design", ar:"مصمم تجربة مستخدم", en:"UX Designer", tags:["i-design","i-people"],
+  skills:[S("research","بحث المستخدم","User research",1),S("wire","المخططات الأولية","Wireframing",1),S("proto","النماذج التفاعلية","Prototyping",1),
+    S("ui","أساسيات الواجهة","UI fundamentals"),S("a11y","إمكانية الوصول","Accessibility"),S("case","دراسة حالة","Case study")]},
+ {id:"pm", field:"biz", ar:"منسق مشاريع", en:"Project Coordinator", tags:["i-people","i-public"],
+  skills:[S("plan","تخطيط النطاق والجدول","Scope and schedule",1),S("stake","إدارة أصحاب المصلحة","Stakeholder management",1),
+    S("doc","التوثيق","Documentation"),S("tools","أدوات إدارة المهام","Task tools"),S("budget","متابعة الميزانية","Budget tracking"),S("report","التقارير","Reporting",1)]},
+ {id:"marketing", field:"biz", ar:"أخصائي تسويق رقمي", en:"Digital Marketing Specialist", tags:["i-writing","i-design","i-startup"],
+  skills:[S("content","صناعة المحتوى","Content production",1),S("social","إدارة المنصات","Platform management",1),S("ads","الإعلانات المدفوعة","Paid ads"),
+    S("analytics","تحليلات المنصات","Analytics",1),S("copy","الكتابة الإعلانية","Copywriting"),S("brand","الهوية والرسائل","Brand messaging")]},
+ {id:"accountant", field:"fin", ar:"محاسب", en:"Accountant", tags:["i-numbers"],
+  skills:[S("acc","الدورة المحاسبية","Bookkeeping cycle",1),S("ifrs","المعايير المحاسبية","Accounting standards",1),S("excel","Excel المالي","Financial Excel",1),
+    S("erp","أنظمة ERP","ERP systems"),S("tax","الأنظمة الضريبية","Tax rules"),S("recon","التسويات","Reconciliation")]},
+ {id:"hr", field:"biz", ar:"أخصائي موارد بشرية", en:"HR Specialist", tags:["i-people"],
+  skills:[S("recruit","الاستقطاب والمقابلات","Recruiting and interviewing",1),S("hris","أنظمة الموارد البشرية","HR systems"),
+    S("labor","نظام العمل","Labour regulations",1),S("onb","التهيئة والتطوير","Onboarding"),S("data-hr","تحليل بيانات الموظفين","People data"),S("comm","الاتصال الداخلي","Internal communication")]},
+ {id:"quality", field:"health", ar:"أخصائي جودة وسلامة مرضى", en:"Quality and Patient-Safety Specialist", tags:["i-public","i-numbers"],
+  skills:[S("qi","تحسين الجودة","Quality improvement",1),S("stdq","المعايير والاعتماد","Standards and accreditation",1),S("audit","التدقيق الداخلي","Internal audit"),
+    S("dataq","مؤشرات الأداء","Performance indicators",1),S("train","تدريب الفرق","Team training"),S("rep","كتابة التقارير","Report writing")]},
+ {id:"eng-site", field:"eng", ar:"مهندس موقع", en:"Site Engineer", tags:["i-field"],
+  skills:[S("cad","الرسم الهندسي","Technical drawing",1),S("spec","المواصفات والعقود","Specs and contracts",1),S("safety","السلامة في الموقع","Site safety",1),
+    S("sched","الجدولة","Scheduling"),S("qc","ضبط الجودة","Quality control"),S("repe","تقارير الموقع","Site reporting")]}
+];
+const INTERESTS = [S("i-tech","التقنية","Technology"),S("i-data","البيانات","Data"),S("i-people","العمل مع الناس","Working with people"),
+ S("i-writing","الكتابة","Writing"),S("i-field","العمل الميداني","Field work"),S("i-design","التصميم","Design"),
+ S("i-numbers","الأرقام والتحليل","Numbers and analysis"),S("i-public","القطاع العام","Public sector"),S("i-startup","الشركات الناشئة","Startups")];
+
+/* ------------------------------- state ---------------------------------- */
+const KEY="masari.v2";
+const BLANK = {
+  authed:false, consent:false, locale:"ar", theme:"light", step:0, completed:false, route:"home",
+  profile:{name:"",uni:"",field:"",major:"",year:"",gpa:"",gpaScale:"5",gpaSkip:false,exp:"none",coop:false,courses:"0",
+    skills:{},interests:[],direction:"",role:"",presence:{cv:false,li:false,pf:false},cvText:"",headline:"",summary:"",email:""},
+  projects:[], plan:[], picks:{skills:[],orgs:[]}, filters:{q:"",type:"all",cost:"all",format:"all"}, aiOpen:false
+};
+let state = load(), analyzing = 0, sheetOpen=false, moreOpen=false, pendingConsent=null, routeHistory=[], authMode="login";
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    const authedSession = (function(){
+      try{ return sessionStorage.getItem("masari.authed") === "true"; }catch(e){ return false; }
+    })();
+    if(!raw) {
+      const s = migrate();
+      if(authedSession) s.authed = true;
+      return s;
+    }
+    const p = JSON.parse(raw);
+    const s = Object.assign(structuredClone(BLANK), p, {profile:Object.assign(structuredClone(BLANK.profile), p.profile||{})});
+    if(authedSession || p.authed === true) s.authed = true;
+    return s;
+  }catch(e){ return structuredClone(BLANK); }
+}
+function migrate(){ /* carry over data saved by the previous version */
+  const s = structuredClone(BLANK);
+  try{
+    const old = JSON.parse(localStorage.getItem("masar.v1")||"null"); if(!old) return s;
+    Object.assign(s, {consent:old.consent, locale:old.locale||"ar", theme:old.theme||"light",
+      completed:!!old.completed, projects:old.projects||[], picks:old.picks||s.picks});
+    Object.assign(s.profile, old.profile||{});
+    const sk={}; Object.entries(s.profile.skills||{}).forEach(([k,v])=> sk[k] = v>=2?100:v===1?50:0);
+    s.profile.skills = sk;
+  }catch(e){}
+  return s;
+}
+function save(){ if(!state.consent) return; try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function wipe(){ try{ localStorage.removeItem(KEY); localStorage.removeItem("masar.v1"); }catch(e){} state = structuredClone(BLANK); }
+
+/* ------------------------------- helpers -------------------------------- */
+const L = ()=> I18N[state.locale];
+const t = (p)=> p.split(".").reduce((o,k)=> (o&&o[k]!==undefined)?o[k]:p, L());
+const lc = ()=> state.locale==="ar" ? "ar-SA-u-nu-latn" : "en-GB";
+const nf = (n)=> new Intl.NumberFormat(lc()).format(n);
+const yf = (n)=> new Intl.NumberFormat(lc(),{useGrouping:false}).format(n);  // years: no thousands separator
+const pc = (n)=> new Intl.NumberFormat(lc(),{style:"percent",maximumFractionDigits:0}).format(n/100);
+const df = (iso)=> new Intl.DateTimeFormat(lc(),{day:"2-digit",month:"short"}).format(new Date(iso));
+const sep = ()=> state.locale==="ar" ? "، " : ", ";   // no middle dots between words
+const nm = (o)=> state.locale==="ar" ? (o.ar||o.nameAr) : (o.en||o.nameEn);
+const esc = (s)=> String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ic = (id,cls="icon")=> `<svg class="${cls}" aria-hidden="true"><use href="#${id}"></use></svg>`;
+const VB = {"il-hero":"0 0 420 200","il-hero-paths":"0 0 440 220","il-empty":"0 0 200 120",
+  "il-portfolio":"0 0 200 130","il-privacy":"0 0 200 130","il-discover":"0 0 300 180","il-cv-doc":"0 0 220 150"};
+/* Inline SVG: no network request, no layout shift (viewBox fixes the ratio), no lazy loading needed, pass alt for meaningful art; decorative art stays aria-hidden, */
+/* Photography slots, fill a key with {src, srcset, w, h} when real licensed photos
+   exist in the repo; until then the matching illustration is rendered, photos load
+   lazily (except the hero) with width/height set, so no layout shift, */
+const PHOTOS = {};   // hero:{src:"img/hero-1024.webp", srcset:"img/hero-640.webp 640w, img/hero-1024.webp 1024w", w:1024, h:640}
+function photoSlot(key, alt, fallbackId, cls="art", eager){
+  const ph = PHOTOS[key];
+  if(!ph) return art(fallbackId, cls, alt);
+  return `<img class="${cls}" src="${ph.src}" ${ph.srcset?`srcset="${ph.srcset}" sizes="(max-width:760px) 100vw, 480px"`:""}
+    width="${ph.w}" height="${ph.h}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt)}">`;
+}
+function mesh(){
+  return `<svg class="mesh" viewBox="0 0 1200 420" preserveAspectRatio="none" aria-hidden="true">
+    <defs><filter id="mblur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="70"/></filter></defs>
+    <g filter="url(#mblur)" opacity=".85">
+      <ellipse cx="120" cy="120" rx="260" ry="150" fill="#f5e9d4"/>
+      <ellipse cx="380" cy="60" rx="230" ry="130" fill="#fed7aa"/>
+      <ellipse cx="640" cy="140" rx="250" ry="150" fill="#c7d2fe"/>
+      <ellipse cx="900" cy="70" rx="240" ry="140" fill="#818cf8" opacity=".45"/>
+      <ellipse cx="1130" cy="150" rx="220" ry="140" fill="#533afd" opacity=".35"/>
+      <ellipse cx="1010" cy="240" rx="200" ry="120" fill="#ea2261" opacity=".20"/>
+    </g></svg>`;
+}
+const art = (id,cls="art",alt)=> `<svg class="${cls}" viewBox="${VB[id]||"0 0 200 130"}" ${alt?`role="img" aria-label="${esc(alt)}"`:'aria-hidden="true"'}><use href="#${id}"></use></svg>`;
+const today = ()=>{ const d=new Date(); d.setHours(0,0,0,0); return d; };
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString();};
+const roleById = id => ROLES.find(r=>r.id===id);
+const lvl = id => state.profile.skills[id]||0;
+
+/* ------------------------------ analytics -------------------------------- */
+const WEIGHTS = {skills:0.60, field:0.25, interests:0.15};
+function matchScore(role){
+  const p = state.profile;
+  const cov = role.skills.reduce((a,s)=> a + lvl(s.id), 0) / (role.skills.length*100);
+  let field = role.field===p.field ? 1 : (p.direction==="transition" ? 0.55 : 0.35);
+  const tags = role.tags||[];
+  const hit = tags.filter(x=>p.interests.includes(x)).length;
+  const inter = tags.length ? Math.min(1, hit/Math.min(2,tags.length)) : 0.5;
+  return Math.round((cov*WEIGHTS.skills + field*WEIGHTS.field + inter*WEIGHTS.interests)*100);
+}
+function gapOf(role){
+  const g={have:[],dev:[],prio:[]};
+  (role?role.skills:[]).forEach(s=>{
+    const v = lvl(s.id);
+    if(v>=75) g.have.push(s);
+    else { g.dev.push(s); if(s.core && v<50) g.prio.push(s); }
+  });
+  return g;
+}
+function cvChecks(){
+  const p=state.profile, role=roleById(p.role);
+  const named = role? role.skills.filter(s=>lvl(s.id)>=50) : [];
+  return [
+    {id:"role", ok:!!p.role, ar:"دور وظيفي واحد في العنوان", en:"A single target role in the headline"},
+    {id:"skills", ok:named.length>=3, ar:"ثلاث مهارات فأكثر مكتوبة بأسمائها", en:"Three or more named skills"},
+    {id:"summary", ok:(p.summary||"").length>40, ar:"نبذة من سطرين إلى ثلاثة", en:"A two-to-three line summary"},
+    {id:"edu", ok:!!p.major && !!p.year, ar:"التعليم كاملًا: التخصص وسنة التخرج", en:"Education: major and graduation year"},
+    {id:"exp", ok:p.exp!=="none"||p.coop, ar:"خبرة أو تدريب مذكور", en:"Experience or training listed"},
+    {id:"proj", ok:state.projects.length>0, ar:"مشروع واحد على الأقل بنتيجة واضحة", en:"At least one project with a clear result"}
+  ];
+}
+const cvScore = ()=> Math.round(cvChecks().filter(c=>c.ok).length / cvChecks().length * 100);
+function liChecks(){
+  const p=state.profile, role=roleById(p.role), named = role? role.skills.filter(s=>lvl(s.id)>=50):[];
+  return [
+    {id:"headline", ok:!!p.role, key:"headline"},
+    {id:"about", ok:(p.summary||"").length>40, key:"about"},
+    {id:"skills", ok:named.length>=3, key:"skills"},
+    {id:"exp", ok:p.exp!=="none"||p.coop, key:"exp"}
+  ];
+}
+const liScore = ()=> Math.round(liChecks().filter(c=>c.ok).length/4*100);
+const pfScore = ()=> Math.min(100, state.projects.length*40 + (state.projects.some(x=>x.link)?20:0));
+const readiness = ()=> Math.round(cvScore()*0.45 + liScore()*0.3 + pfScore()*0.25);
+const planProgress = ()=> state.plan.length ? Math.round(state.plan.filter(i=>i.status==="done").length/state.plan.length*100) : 0;
+function bestPaths(){ return ROLES.map(r=>({role:r, m:matchScore(r)})).sort((a,b)=>b.m-a.m); }
+function whyPath(role){
+  const p=state.profile, g=gapOf(role), out=[];
+  const ar = state.locale==="ar";
+  if(role.field===p.field) out.push(ar?"مناسب لتخصصك الأكاديمي":"Fits your academic field");
+  else if(p.direction==="transition") out.push(ar?"يتوافق مع رغبتك في الانتقال لمجال آخر":"Matches your wish to move fields");
+  if(g.have.length) out.push(ar?`يتوافق مع ${nf(g.have.length)} من مهاراتك الحالية`:`Matches ${nf(g.have.length)} of your current skills`);
+  const hit=(role.tags||[]).filter(x=>p.interests.includes(x)).length;
+  if(hit) out.push(ar?"يتقاطع مع اهتماماتك المسجّلة":"Overlaps with your recorded interests");
+  out.push(ar?"دور عام مطلوب في أكثر من قطاع":"A general role used across several sectors");
+  return out;
+}
+function aiTip(){
+  const p=state.profile, role=roleById(p.role); if(!role) return null;
+  const g=gapOf(role);
+  if(g.prio.length) return {icon:"i-target", body:`${t("ai.gapLead")} ${nm(g.prio[0])} ${t("ai.gapTail")}`, route:"skills"};
+  if(g.dev.length) return {icon:"i-skills", body:`${t("ai.gapLead")} ${nm(g.dev[0])} ${t("ai.gapTail")}`, route:"skills"};
+  if(cvScore()<80) return {icon:"i-doc", body:`${t("ai.cvLead")}: ${state.locale==="ar"?cvChecks().find(c=>!c.ok).ar:cvChecks().find(c=>!c.ok).en}`, route:"cv"};
+  if(!state.projects.length) return {icon:"i-case", body:t("ai.pfLead"), route:"portfolio"};
+  if(liScore()<75) return {icon:"i-link", body:`${t("ai.liLead")}: ${t("li."+liChecks().find(c=>!c.ok).key)}`, route:"linkedin"};
+  return {icon:"i-check", body:`${t("ai.applyLead")} — ${t("ai.applyBody")}`, route:"opps"};
+}
+
+/* -------------------------------- plan ---------------------------------- */
+function buildPlan(){
+  const p=state.profile, role=roleById(p.role); if(!role) return;
+  const g=gapOf(role);
+  const targets = (state.picks.skills.length ? role.skills.filter(s=>state.picks.skills.includes(s.id))
+                  : [...g.prio, ...g.dev].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4);
+  const items=[]; let w=0;
+  const add=(phase,ar,en,weeks,mins,prio,dep,url)=>{ w+=weeks;
+    items.push({id:"m"+items.length, phase, ar, en, mins, prio, due:addDays(today(), w*7), dep:dep||null, status:"not_started", url:url||null}); };
+  const foundation = targets.slice(0,1), technical = targets.slice(1);
+  if(!p.presence.cv) add(1,"جهّز مسودة سيرة بعمود واحد","Draft a single-column CV",1,45,"high");
+  foundation.forEach(s=> add(1,`أساسيات ${s.ar}`,`Fundamentals of ${s.en}`,2,45,"high"));
+  if(!foundation.length) add(1,"راجع أساسيات مجالك","Review your field fundamentals",1,30,"med");
+  technical.forEach(s=>{ add(2,`تعلّم ${s.ar}`,`Learn ${s.en}`,2,45,"high");
+    add(2,`طبّق ${s.ar} على بيانات حقيقية`,`Apply ${s.en} to real data`,1,60,"med", items[items.length-1].id); });
+  state.picks.orgs.forEach(id=>{ const o=ENTITIES.find(e=>e.id===id); if(o) add(2,`تحقّق من برامج ${o.nameAr} في موقعها الرسمي`,`Check ${o.nameEn} programmes on its official site`,1,20,"low"); });
+  add(3,"ابنِ مشروعًا واحدًا يثبت مهاراتك","Build one project that proves your skills",2,120,"high");
+  add(3,"أضف المشروع إلى معرض أعمالك","Add the project to your portfolio",1,30,"med", items[items.length-1].id);
+  if(!p.presence.li) add(4,"أكمل ملف لينكدإن","Complete your LinkedIn profile",1,25,"med");
+  add(4,"حدّث سيرتك بالمهارات الجديدة","Update your CV with the new skills",1,30,"high");
+  add(4,"أرسل خمس رسائل تواصل مهني","Send five outreach messages",1,40,"med");
+  add(4,"استعرض برامج الخريجين والتدريب التعاوني في عَتَبة","Browse graduate and co-op programmes on Atabah",1,25,"high",null,ATABAH.browseUrl);
+  add(4,"قدّم على عشر وظائف أو برامج مطابقة","Apply to ten matching roles or programmes",2,90,"high");
+  state.plan = items; save();
+}
+const phaseName = n => t("plan.p"+n);
+function tasksToday(){ return state.plan.filter(i=>i.status!=="done").slice(0,3); }
+
+/* ------------------------------ rendering -------------------------------- */
+const app=document.getElementById("app"), overlay=document.getElementById("overlay");
+const VIEWS = {home:vHome, path:vPath, analysis:vAnalysis, skills:vSkills, plan:vPlan, tasks:vTasks, cv:vCV, portfolio:vPortfolio,
+  linkedin:vLinkedIn, opps:vOpps, profile:vProfile, guide:vGuide, sources:vSources, settings:vSettings};
+const NAV_MAIN = [["path","i-target"],["analysis","i-scale"],["skills","i-skills"],["plan","i-map"],["tasks","i-check-sq"]];
+const NAV_BUILD = [["cv","i-doc"],["portfolio","i-case"],["linkedin","i-link"],["opps","i-org"]];
+const NAV_ACCT = [["profile","i-user"],["guide","i-book"],["sources","i-shield"],["settings","i-cog"]];
+
+function render(){
+  document.documentElement.lang=L().htmlLang; document.documentElement.dir=L().dir;
+  document.documentElement.setAttribute("data-theme", state.theme);
+  if(!state.authed){
+    app.innerHTML = vAuth();
+    renderOverlay();
+    return;
+  }
+  let body="";
+  try{ body = analyzing ? vAnalyzing() : (VIEWS[state.route]||vHome)(); }
+  catch(e){ body = `<div class="card"><h2>${esc(e.message)}</h2><button class="btn sec" data-act="go" data-route="home">${t("nav.home")}</button></div>`; }
+  app.innerHTML = `<div class="shell">${sidebar()}<div class="main">${topbar()}<div class="page stack">${body}</div></div></div>${tabbar()}`;
+  renderOverlay();
+}
+
+function vAuth(){
+  const isSignup = authMode === "signup";
+  return `<div class="auth-shell">
+    <div class="auth-panel">
+      <div class="auth-hd">
+        <div class="topbar-brand" style="display:flex; align-items:center; gap:10px">
+          <svg viewBox="0 0 240 230" class="topbar-logo" aria-hidden="true"><use href="#logo-masari"></use></svg>
+          <b style="font-size:18px; font-weight:700; letter-spacing:.01em; color:var(--text); line-height:1">${t("brand")}</b>
+        </div>
+        <div class="row" style="gap:6px">
+          <button class="btn sec sm" data-act="lang" aria-label="${t("ui.lang")}">${t("ui.lang")}</button>
+          <button class="btn sec sm" data-act="theme" aria-label="${t("ui.theme")}">${state.theme==="dark"?"☾":"☀"}</button>
+        </div>
+      </div>
+
+      <div class="auth-body">
+        <h1 class="auth-title">${isSignup ? t("auth.titleSignup") : t("auth.titleLogin")}</h1>
+        <p class="auth-sub">${t("auth.sub")}</p>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab ${!isSignup?'active':''}" data-act="auth-tab" data-mode="login" role="tab" aria-selected="${!isSignup}">${t("auth.tabLogin")}</button>
+          <button class="auth-tab ${isSignup?'active':''}" data-act="auth-tab" data-mode="signup" role="tab" aria-selected="${isSignup}">${t("auth.tabSignup")}</button>
+        </div>
+
+        <form class="auth-form" onsubmit="return false">
+          ${isSignup ? `
+            <label class="fl" for="auth-name">${t("auth.name")}</label>
+            <input type="text" id="auth-name" autocomplete="name" placeholder="${t("auth.namePh")}" value="${esc(state.profile.name||"")}" required>
+          ` : ""}
+          <label class="fl" for="auth-email">${t("auth.email")}</label>
+          <input type="email" id="auth-email" autocomplete="email" placeholder="name@example.com" value="${esc(state.profile.email||"")}" required>
+
+          <label class="fl" for="auth-pwd">${t("auth.pwd")}</label>
+          <input type="password" id="auth-pwd" autocomplete="${isSignup?'new-password':'current-password'}" placeholder="••••••••" required>
+
+          <div id="auth-err" class="err" style="margin-top:8px"></div>
+
+          <button class="btn auth-btn" data-act="auth-submit" type="submit" style="width:100%; margin-top:14px; padding:11px 18px; font-weight:500">
+            ${isSignup ? t("auth.submitSignup") : t("auth.submitLogin")}
+          </button>
+        </form>
+
+        <div class="auth-switch">
+          ${isSignup
+            ? `${t("auth.haveAcct")} <button class="link-btn" data-act="auth-tab" data-mode="login">${t("auth.tabLogin")}</button>`
+            : `${t("auth.noAcct")} <button class="link-btn" data-act="auth-tab" data-mode="signup">${t("auth.tabSignup")}</button>`
+          }
+        </div>
+      </div>
+
+      <div class="auth-foot">
+        <div class="pill-badge">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>${t("auth.privacyNote")}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-visual" role="img" aria-label="${t("vis.heroAlt")}"></div>
+  </div>`;
+}
+
+function authSubmit(){
+  const errEl = document.getElementById("auth-err");
+  const emailEl = document.getElementById("auth-email");
+  const pwdEl = document.getElementById("auth-pwd");
+  const nameEl = document.getElementById("auth-name");
+
+  const email = emailEl ? emailEl.value.trim() : "";
+  const pwd = pwdEl ? pwdEl.value : "";
+  const name = nameEl ? nameEl.value.trim() : "";
+
+  if(authMode === "signup" && !name){
+    if(errEl) errEl.textContent = t("auth.errName");
+    if(nameEl) nameEl.focus();
+    return;
+  }
+  if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+    if(errEl) errEl.textContent = t("auth.errEmail");
+    if(emailEl) emailEl.focus();
+    return;
+  }
+  if(!pwd || pwd.length < 4){
+    if(errEl) errEl.textContent = t("auth.errPwd");
+    if(pwdEl) pwdEl.focus();
+    return;
+  }
+
+  if(errEl) errEl.textContent = "";
+
+  state.authed = true;
+  try{ sessionStorage.setItem("masari.authed", "true"); }catch(e){}
+
+  if(authMode === "signup" && name){
+    state.profile.name = name;
+  }
+  if(email){
+    state.profile.email = email;
+  }
+
+  save();
+  render();
+}
+function goTo(route){
+  if(!route) return;
+  if(route !== state.route){
+    if(state.route && routeHistory[routeHistory.length-1] !== state.route){
+      routeHistory.push(state.route);
+      if(routeHistory.length > 30) routeHistory.shift();
+    }
+    try{ history.pushState({route}, ""); }catch(e){}
+    state.route = route;
+  }
+  moreOpen = false; sheetOpen = false;
+  save(); render(); window.scrollTo(0,0);
+}
+window.addEventListener("popstate", ev=>{
+  const r = ev.state && ev.state.route;
+  if(r && r !== state.route && VIEWS[r]){
+    state.route = r;
+    moreOpen = false; sheetOpen = false;
+    save(); render();
+  }
+});
+
+function navBtn([k,i]){
+  return `<button data-act="go" data-route="${k}" ${state.route===k?'aria-current="page"':""}>${ic(i)}<span>${t("nav."+k)}</span></button>`;
+}
+function sidebar(){
+  return `<aside class="side ${moreOpen?'open':''}" aria-label="${t("ui.more")}" ${moreOpen?'':'aria-hidden="true"'}>
+    <div class="side-hd">
+      <button class="btn-more open" data-act="toggle-more" aria-label="${t("ui.more")}" title="${t("ui.more")}">${ic("i-more")}</button>
+      <button class="btn-side-close" data-act="toggle-more" aria-label="${t("ui.close")}">✕</button>
+    </div>
+    <nav aria-label="${t("nav.home")}">
+      ${navBtn(["home","i-home"])}
+      <h4>${t("grp.main")}</h4>${NAV_MAIN.map(navBtn).join("")}
+      <h4>${t("grp.build")}</h4>${NAV_BUILD.map(navBtn).join("")}
+      <h4>${t("grp.acct")}</h4>${NAV_ACCT.map(navBtn).join("")}
+    </nav>
+  </aside>
+  ${moreOpen ? `<div class="side-veil" data-act="toggle-more"></div>` : ""}`;
+}
+function topbar(){
+  const canBack = state.route !== "home";
+  const cur = VIEWS[state.route] ? state.route : "home";
+  return `<div class="topbar">
+    ${canBack ? `<button class="btn-back" data-act="back" aria-label="${t("ui.back")}" title="${t("ui.back")}">${ic("i-arrow", "icon flip-dir")}</button>` : ""}
+    <span class="t-title">${cur === "home" ? `<svg viewBox="0 0 240 230" class="topbar-logo" aria-hidden="true"><use href="#logo-masari"></use></svg><b>${t("brand")}</b>` : t("nav."+cur)}</span>
+    <button class="btn sec sm" data-act="lang">${t("ui.lang")}</button>
+    <button class="btn sec sm" data-act="theme" aria-label="${t("ui.theme")}">${state.theme==="dark"?"☾":"☀"}</button>
+    <button class="btn-more ${moreOpen?'open':''}" data-act="toggle-more" aria-label="${t("ui.more")}" title="${t("ui.more")}">${ic("i-more")}</button>
+  </div>`;
+}
+function tabbar(){
+  const items=[["home","i-home"],["path","i-target"],["plan","i-map"],["tasks","i-check-sq"]];
+  return `<nav class="tabbar" aria-label="${t("nav.home")}">
+    ${items.map(([k,i])=>`<button data-act="go" data-route="${k}" ${state.route===k?'aria-current="page"':""}>${ic(i)}<span>${t("nav."+k)}</span></button>`).join("")}
+    <button class="tab-more ${moreOpen?'active':''}" data-act="toggle-more" aria-label="${t("ui.more")}" title="${t("ui.more")}" ${moreOpen?'aria-expanded="true"':'aria-expanded="false"'}>${ic("i-more")}</button></nav>`;
+}
+function ring(val, label){
+  const r=54, c=2*Math.PI*r, off=c*(1-val/100);
+  return `<div class="ring"><svg width="132" height="132" viewBox="0 0 132 132">
+      <circle cx="66" cy="66" r="${r}" fill="none" stroke="var(--line-2)" stroke-width="11"/>
+      <circle cx="66" cy="66" r="${r}" fill="none" stroke="var(--brand)" stroke-width="11" stroke-linecap="round"
+        stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
+    <div class="val"><b>${pc(val)}</b><small>${esc(label)}</small></div></div>`;
+}
+function bar(val, tone){ return `<div class="bar"><span style="width:${Math.max(2,val)}%" ${tone?`data-tone="${tone}"`:""}></span></div>`; }
+
+
+/* ---------------------- product visuals (data-driven) --------------------- */
+function journeyCard(){
+  const role=roleById(state.profile.role), cov = role? Math.round(role.skills.reduce((a,s)=>a+lvl(s.id),0)/(role.skills.length*100)*100):0;
+  const stages=[
+    {k:"profile", i:"i-user", done: state.completed},
+    {k:"skills", i:"i-skills", done: cov>=50},
+    {k:"learning", i:"i-book", done: state.plan.some(x=>x.status==="done")},
+    {k:"portfolio", i:"i-case", done: state.projects.length>0},
+    {k:"career", i:"i-target", done: planProgress()>=100}
+  ];
+  const now = stages.findIndex(s=>!s.done);
+  let html="";
+  stages.forEach((s,i)=>{
+    if(i) html += `<i class="jline" data-on="${stages[i-1].done?1:0}"></i>`;
+    const st = s.done?"done":(i===now?"now":"todo");
+    html += `<div class="jstage" data-s="${st}"><div class="bub">${ic(s.i)}</div><span>${t("vis.jp."+s.k)}</span></div>`;
+  });
+  return `<section class="card"><div class="row spread" style="margin-bottom:6px">
+      <h4 style="margin:0">${t("vis.journey")}</h4>
+      <span class="cap">${t("dash.planProg")} ${pc(planProgress())}</span></div>
+    <div class="journey">${html}</div></section>`;
+}
+function gapBridge(cov){
+  const h = 18 + Math.round(cov*0.62);
+  const steps=[1,2,3].map(n=>{ const y=104-(18+Math.round((cov+(100-cov)*n/4)*0.62)); 
+    return `<rect x="${96+n*46}" y="${y}" width="34" height="${104-y}" rx="4" fill="var(--brand)" opacity="${0.28+n*0.16}"/>`; }).join("");
+  return `<div class="bridge">
+    <svg viewBox="0 0 320 120" class="flip-dir" role="img" aria-label="${esc(t("vis.bridgeAlt"))}">
+      <rect x="20" y="${104-h}" width="56" height="${h}" rx="6" fill="var(--brand)"/>
+      ${steps}
+      <rect x="264" y="26" width="40" height="78" rx="6" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-dasharray="5 5"/>
+      <path d="M284 26V8" stroke="var(--brand)" stroke-width="2.5"/><path d="M284 9l22 7-22 7z" fill="var(--gold)"/>
+      <rect x="8" y="104" width="304" height="3" rx="1.5" fill="var(--line)"/>
+    </svg>
+    <div class="row spread"><span class="cap">${t("vis.now")} <b>${pc(cov)}</b></span>
+      <span class="cap">${t("vis.goal")} <b>${pc(100)}</b></span></div>
+  </div>`;
+}
+function aiPipeline(){
+  const ch = `<svg class="ch dir-icon" aria-hidden="true"><use href="#i-arrow"></use></svg>`;
+  const cells=[["i-user","a"],["i-spark","b"],["i-target","c"],["i-map","d"]];
+  return `<div class="pipe">${cells.map(([i,k],n)=>`${n?ch:""}<span class="p">${ic(i)} ${t("vis.pipe."+k)}</span>`).join("")}</div>`;
+}
+function milestoneTrack(){
+  const role=roleById(state.profile.role);
+  let html="";
+  [1,2,3,4].forEach(n=>{
+    const items=state.plan.filter(i=>(i.phase||1)===n);
+    const done = items.length && items.every(i=>i.status==="done");
+    const started = items.some(i=>i.status!=="not_started");
+    if(n>1) html += `<i class="jline" data-on="${state.plan.filter(i=>(i.phase||1)===n-1).every(i=>i.status==="done")?1:0}"></i>`;
+    html += `<div class="jstage" data-s="${done?"done":started?"now":"todo"}">
+      <div class="bub">${done?ic("i-check"):nf(n)}</div><span>${phaseName(n)}</span></div>`;
+  });
+  html += `<i class="jline" data-on="${planProgress()>=100?1:0}"></i>
+    <div class="jstage" data-s="${planProgress()>=100?"done":"todo"}"><div class="bub">${ic("i-target")}</div>
+    <span>${role?esc(nm(role)):t("vis.dest")}</span></div>`;
+  return `<div class="journey" style="margin-bottom:16px">${html}</div>`;
+}
+
+/* ---------------------- 1. dashboard ------------------------- */
+function vHome(){
+  const p=state.profile, line=L().daily[Math.floor(Date.now()/86400000)%L().daily.length];
+  if(!state.completed) return welcome(line);
+  const role=roleById(p.role), m=role?matchScore(role):0, tip=aiTip(), tasks=tasksToday();
+  return `
+  <section class="card pad-lg">
+    <h1 style="margin-bottom:2px">${t("dash.hi")}${p.name?"، "+esc(p.name):""} 👋</h1>
+    <p class="cap" style="margin:0">${state.plan.length?t("dash.subDone"):t("dash.sub")}</p>
+    <p class="cap" style="margin:2px 0 0">${esc(line)}</p>
+  </section>
+
+  ${journeyCard()}
+
+  <div class="grid g4">
+    ${statCard("i-target", t("dash.path"), role?esc(nm(role)):t("dash.none"), null)}
+    ${statCard("i-spark", t("dash.match"), pc(m), m)}
+    ${statCard("i-map", t("dash.planProg"), pc(planProgress()), planProgress())}
+    ${statCard("i-doc", t("dash.ready"), pc(readiness()), readiness())}
+  </div>
+
+  <div class="split wide">
+    <section class="card pad-lg hov">
+      <div class="row spread" style="align-items:flex-start">
+        <div style="flex:1 1 220px">
+          <span class="pill brand">${ic("i-target")} ${t("path.title")}</span>
+          <h2 style="margin:10px 0 4px">${role?esc(nm(role)):t("dash.none")}</h2>
+          <p class="cap">${role?esc(whyPath(role).slice(0,2).join(sep())):""}</p>
+          <div class="row">
+            <button class="btn sm" data-act="go" data-route="analysis">${t("path.full")}</button>
+            <button class="btn sec sm" data-act="go" data-route="profile">${t("path.change")}</button>
+          </div>
+        </div>
+        ${ring(m, t("path.match"))}
+      </div>
+    </section>
+
+    <section class="ai reveal">
+      <div class="hd">${ic("i-spark","i-lg")} ${t("ai.title")}</div>
+      ${tip? `<p style="margin:10px 0">${esc(tip.body)}</p>
+        <div class="row"><button class="btn sm" data-act="go" data-route="${tip.route}">${t("ai.show")}</button></div>`
+       : `<p style="margin:10px 0">${t("sk.noRole")}</p>`}
+      ${aiPipeline()}
+      <p class="cap" style="margin:12px 0 0">${t("ai.how")}</p>
+    </section>
+  </div>
+
+  <div class="split">
+    <section class="card pad-lg">
+      <div class="row spread"><h2 style="margin:0">${t("dash.today")}</h2>
+        <button class="btn sec sm" data-act="go" data-route="tasks">${t("dash.seeAll")}</button></div>
+      <div class="rule"></div>
+      ${tasks.length? `<div class="grid" style="gap:10px">${tasks.map(taskRow).join("")}</div>`
+        : `<div class="empty">${art("il-empty","art")}<p>${state.plan.length?t("dash.allDone"):t("tasks.empty")}</p>
+           <button class="btn sm" data-act="go" data-route="plan">${t("plan.build")}</button></div>`}
+    </section>
+    ${readinessCard()}
+  </div>`;
+}
+function statCard(icon,label,value,val){
+  return `<div class="card hov"><div class="row" style="gap:8px; color:var(--muted)">${ic(icon)}<span class="cap">${label}</span></div>
+    <div class="stat"><span class="num">${value}</span></div>
+    ${val!==null&&val!==undefined?`<div style="margin-top:8px">${bar(val, val<40?"low":val<70?"warn":null)}</div>`:""}</div>`;
+}
+function readinessCard(){
+  const c=cvScore(), l=liScore(), f=pfScore(), o=readiness();
+  return `<section class="card pad-lg">
+    <h2 style="margin:0">${t("rd.title")}</h2><div class="rule"></div>
+    ${[["rd.cv",c],["rd.li",l],["rd.pf",f]].map(([k,v])=>`
+      <div class="barline"><div class="lab"><span>${t(k)}</span><b>${pc(v)}</b></div>${bar(v, v<40?"low":v<70?"warn":null)}</div>`).join("")}
+    <div class="rule"></div>
+    <div class="row spread"><div><div class="cap">${t("rd.overall")}</div><div class="stat"><span class="num">${pc(o)}</span></div></div>
+      <button class="btn sm" data-act="go" data-route="cv">${t("rd.improve")}</button></div>
+    <p class="cap" style="margin:10px 0 0">${o>=70?t("rd.close"):t("rd.far")}</p>
+  </section>`;
+}
+function welcome(line){
+  const fieldIcon = {cs:"i-skills", biz:"i-case", fin:"i-doc", health:"i-shield", design:"i-star", eng:"i-org"};
+  const track = `<svg class="track" viewBox="0 0 200 22" width="120" height="14" aria-hidden="true">
+      <path d="M6 16h60" stroke="var(--brand-pill)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M74 16h60" stroke="var(--brand-pill)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="6" cy="16" r="5" fill="var(--brand)"/><circle cx="70" cy="16" r="5" fill="var(--brand-pill)"/>
+      <circle cx="138" cy="16" r="5" fill="var(--brand-pill)"/>
+      <path d="M158 16h22" stroke="var(--brand-pill)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M176 6l14 10-14 10z" fill="var(--brand)"/></svg>`;
+  const stops = [["profile","i-user"],["skills","i-skills"],["learning","i-book"],["portfolio","i-case"],["career","i-target"]];
+  return `
+  <section class="card pad-lg mesh-host">${mesh()}
+    <div class="split wide" style="align-items:center">
+      <div>
+        <span class="pill brand">${ic("i-spark")} ${t("land.eyebrow")}</span>
+        <h1 style="margin:14px 0 8px">${t("land.h1")}</h1>
+        <p>${t("land.sub")}</p>
+        <div class="row">
+          <button class="btn" data-act="go" data-route="profile">${t("land.ctaStart")}</button>
+          <button class="btn sec" data-act="go" data-route="guide">${t("land.ctaGuide")}</button>
+        </div>
+        <div class="hero-stats">
+          <div><b>${nf(ROLES.length)}</b><span>${t("land.statPaths")}</span></div>
+          <div><b>${nf(ENTITIES.length)}</b><span>${t("land.statOrgs")}</span></div>
+          <div><b>${nf(4)}</b><span>${t("land.statPhases")}</span></div>
+        </div>
+        <p class="cap" style="margin-top:14px">${esc(line)}</p>
+      </div>
+      ${photoSlot("hero", t("vis.heroAlt"), "il-hero-paths", "art flip-dir", true)}
+    </div>
+  </section>
+
+  <section class="card pad-lg">
+    <h2 style="margin:0">${t("land.journeyTitle")}</h2>
+    <div class="journey" style="margin-top:14px">
+      ${stops.map(([k,i],n)=> (n?`<i class="jline"></i>`:"") +
+        `<div class="jstage" data-s="${n===0?"now":"todo"}"><div class="bub">${ic(i)}</div><span>${t("vis.jp."+k)}</span></div>`).join("")}
+    </div>
+  </section>
+
+  <section>
+    <div class="row spread" style="margin-bottom:12px">
+      <div><h2 style="margin:0">${t("land.pathsTitle")}</h2><p class="cap" style="margin:2px 0 0">${t("land.pathsSub")}</p></div>
+    </div>
+    <div class="grid g2">
+      ${ROLES.map(r=>`<article class="path-card">
+        ${track}
+        <div class="row spread" style="align-items:flex-start">
+          <h3 style="margin:0">${esc(nm(r))}</h3>
+          <span style="color:var(--brand)">${ic(fieldIcon[r.field]||"i-target","i-lg")}</span>
+        </div>
+        <div class="cap" style="margin:6px 0 10px">${t("land.skillsIn")}: ${r.skills.filter(x=>x.core).slice(0,3).map(x=>esc(nm(x))).join(sep())}</div>
+        <button class="btn sec sm" data-act="start-role" data-id="${r.id}">${t("land.explore")}</button>
+      </article>`).join("")}
+    </div>
+  </section>
+
+  <section class="card pad-lg">
+    <h2 style="margin:0">${t("land.orgsTitle")}</h2>
+    <p class="cap" style="margin:6px 0 14px">${t("land.orgsNote")}</p>
+    <div class="orgs">${ENTITIES.map(e=>`<div class="org-tile">${esc(nm(e))}</div>`).join("")}</div>
+    <div class="row" style="margin-top:16px"><button class="btn" data-act="go" data-route="profile">${t("land.ctaStart")}</button>
+      <button class="btn sec" data-act="go" data-route="opps">${t("nav.opps")}</button></div>
+  </section>`;
+}
+
+/* ------------------- strengths / weaknesses (rule-based) ------------------ */
+function swot(){
+  const p=state.profile, role=roleById(p.role);
+  const g = role? gapOf(role) : {have:[],dev:[],prio:[]};
+  const cov = role? Math.round(role.skills.reduce((a,s)=>a+lvl(s.id),0)/(role.skills.length*100)*100) : 0;
+  const ar = state.locale==="ar", S=[], W=[];
+  const push=(arr,icon,tAr,tEn,wAr,wEn,route)=> arr.push({icon, t:ar?tAr:tEn, why:ar?wAr:wEn, route});
+  const names = a => a.slice(0,3).map(x=>nm(x)).join(ar?"، ":", ");
+  const fieldName = FIELDS.find(f=>f.id===p.field);
+
+  if(g.have.length>=2) push(S,"i-skills","أساس مهاري متين","A solid skill base",
+    `${nf(g.have.length)} من مهارات الدور بمستوى ٧٥٪ فأعلى: ${names(g.have)}`,
+    `${nf(g.have.length)} of the role's skills are at 75% or above: ${names(g.have)}`,"skills");
+  if(role && role.field===p.field) push(S,"i-target","تخصصك في صميم الدور","Your field sits inside the role",
+    `${nm(role)} ضمن مجال ${fieldName?nm(fieldName):""}`, `${nm(role)} belongs to ${fieldName?nm(fieldName):""}`,"path");
+  if(p.exp==="y1"||p.exp==="y2") push(S,"i-case","خبرة عملية فعلية","Real work experience",
+    t("exps."+p.exp), t("exps."+p.exp),"cv");
+  else if(p.coop) push(S,"i-case","تدريب تعاوني منجز","Completed co-op training",
+    "التدريب التعاوني يُحسب خبرة في أغلب برامج الخريجين","Co-op counts as experience in most graduate programmes","cv");
+  if((parseInt(p.courses||"0",10)||0)>=3) push(S,"i-book","تعلّم مستمر","Continuous learning",
+    `${nf(p.courses)} دورات مكتملة`, `${nf(p.courses)} courses completed`,"opps");
+  if(state.projects.length) push(S,"i-case","لديك عمل يُعرض","You have work to show",
+    `${nf(state.projects.length)} مشروع في معرض أعمالك`, `${nf(state.projects.length)} project(s) in your portfolio`,"portfolio");
+  if(cvScore()>=80) push(S,"i-doc","سيرة جاهزة لأنظمة التتبع","An ATS-ready CV", `${nf(cvScore())}/100`, `${nf(cvScore())}/100`,"cv");
+  if(p.direction && p.direction!=="undecided" && p.role) push(S,"i-map","اتجاهك واضح","A clear direction",
+    `${t("dirs."+p.direction)} — ${role?nm(role):""}`, `${t("dirs."+p.direction)} — ${role?nm(role):""}`,"path");
+  if(planProgress()>=40) push(S,"i-check-sq","التزام بالخطة","You are keeping to the plan",
+    `${pc(planProgress())} من بنود خطتك منجزة`, `${pc(planProgress())} of your plan is done`,"tasks");
+
+  if(g.prio.length) push(W,"i-star","مهارات أساسية دون النصف","Core skills below half",
+    `${names(g.prio)} — وهي أساسية لهذا الدور`, `${names(g.prio)} — core to this role`,"skills");
+  else if(role && cov<50) push(W,"i-skills","تغطية مهارات الدور منخفضة","Low coverage of the role's skills",
+    `${pc(cov)} فقط من متطلبات الدور`, `${pc(cov)} of the role's requirements`,"skills");
+  if(p.exp==="none" && !p.coop) push(W,"i-case","لا خبرة ولا تدريب مسجّل","No experience or training recorded",
+    "برامج الخريجين والتدريب التعاوني أقصر طريق لسد هذا","Graduate and co-op programmes are the shortest way to close this","opps");
+  if(!state.projects.length) push(W,"i-case","معرض أعمالك فارغ","Your portfolio is empty",
+    "مشروع واحد بنتيجة واضحة يعوّض كثيرًا من نقص الخبرة","One project with a clear result offsets a lot of missing experience","portfolio");
+  const failed = cvChecks().filter(c=>!c.ok);
+  if(cvScore()<70 && failed.length) push(W,"i-doc","سيرتك ناقصة","Your CV is incomplete",
+    `${nf(cvScore())}/100 — ${failed[0].ar}`, `${nf(cvScore())}/100 — ${failed[0].en}`,"cv");
+  if(liScore()<50){ const f=liChecks().find(c=>!c.ok)||{key:"headline"};
+    push(W,"i-link","ملف لينكدإن غير مكتمل","LinkedIn profile incomplete",
+      `${pc(liScore())} — ${t("li."+f.key)}`, `${pc(liScore())} — ${t("li."+f.key)}`,"linkedin"); }
+  if(!p.direction || p.direction==="undecided") push(W,"i-map","اتجاهك غير محسوم","Your direction is undecided",
+    "جرّب دورين وقارن فجوة المهارات في كل منهما قبل أن تستقر","Try two roles and compare their gaps before settling","path");
+  if(!state.plan.length) push(W,"i-check-sq","لا خطة مبنية","No plan built",
+    "بلا مواعيد يبقى التطوير نية","Without dates, development stays an intention","plan");
+  else { const late = state.plan.filter(i=>i.status!=="done" && new Date(i.due)<today()).length;
+    if(late>=3) push(W,"i-alert","بنود تجاوزت موعدها","Items past their date",
+      `${nf(late)} بنود متأخرة — أعد جدولتها بدل تركها`, `${nf(late)} late items — reschedule rather than leave them`,"plan"); }
+  return {S,W,cov};
+}
+function vAnalysis(){
+  if(!roleById(state.profile.role)) return needProfile();
+  const r=swot(), S=r.S, W=r.W, cov=r.cov;
+  const col=(arr,key,none,tone)=>`<section class="card pad-lg">
+    <div class="row spread"><h2 style="margin:0">${tone==="ok"?ic("i-check","i-lg"):ic("i-alert","i-lg")} ${t("sw."+key)}</h2>
+      <span class="pill ${tone==="ok"?"ok":"warn"}">${nf(arr.length)}</span></div><div class="rule"></div>
+    ${arr.length? `<div class="grid" style="gap:10px">${arr.map(x=>`<div class="task" style="align-items:flex-start">
+        <span style="color:${tone==="ok"?"var(--ok)":"var(--warn)"}; margin-top:3px">${ic(x.icon)}</span>
+        <div style="flex:1; min-width:0"><b>${esc(x.t)}</b><div class="cap">${esc(x.why)}</div>
+        ${tone==="warn"?`<button class="btn sec sm" style="margin-top:8px" data-act="go" data-route="${x.route}">${t("sw.fix")}</button>`:""}</div>
+      </div>`).join("")}</div>` : `<p class="cap">${none}</p>`}
+  </section>`;
+  const txt = `${t("sw.title")}\n${t("sw.strengths")}:\n` + S.map(x=>`- ${x.t}: ${x.why}`).join("\n") +
+    `\n${t("sw.weaknesses")}:\n` + W.map(x=>`- ${x.t}: ${x.why}`).join("\n");
+  return `
+  <section class="card pad-lg">
+    <div class="row spread" style="align-items:flex-start">
+      <div><h1 style="margin:0">${t("sw.title")}</h1><p class="cap" style="margin:4px 0 0">${t("sw.sub")}</p></div>
+      <button class="btn sec sm" data-act="copy" data-text="${esc(txt)}">${t("sw.copy")}</button>
+    </div>
+    <div class="rule"></div>
+    <div class="grid g2">
+      <div class="card tint"><div class="cap">${t("sw.strongest")}</div><b>${S.length?esc(S[0].t):"—"}</b>
+        <div class="cap">${S.length?esc(S[0].why):t("sw.noS")}</div></div>
+      <div class="card"><div class="cap">${t("sw.biggest")}</div><b>${W.length?esc(W[0].t):"—"}</b>
+        <div class="cap">${W.length?esc(W[0].why):t("sw.noW")}</div></div>
+    </div>
+    <div class="barline" style="margin-top:16px"><div class="lab"><span>${t("sk.coverage")}</span><b>${pc(cov)}</b></div>${bar(cov, cov<40?"low":cov<70?"warn":null)}</div>
+  </section>
+  <div class="split">${col(S,"strengths",t("sw.noS"),"ok")}${col(W,"weaknesses",t("sw.noW"),"warn")}</div>
+  <p class="cap">${t("sw.how")}</p>`;
+}
+
+/* ---------------------------- 2. path/results ---------------------------- */
+function vPath(){
+  const p=state.profile, role=roleById(p.role);
+  if(!role) return needProfile();
+  const m=matchScore(role), g=gapOf(role), alts=bestPaths().filter(x=>x.role.id!==role.id).slice(0,3);
+  return `
+  <section class="card pad-lg mesh-host">${mesh()}
+    <div class="split wide" style="align-items:center">
+      <div>
+        <span class="pill brand">${ic("i-spark")} ${t("path.found")}</span>
+        <h1 style="margin:12px 0 4px">${esc(nm(role))}</h1>
+        <div class="row" style="margin-bottom:14px"><span class="pill brand">${pc(m)} ${t("path.match")}</span>
+          <span class="pill">${esc(t("dirs."+(p.direction||"undecided")))}</span></div>
+        <div class="row"><button class="btn" data-act="go" data-route="plan">${t("path.startPlan")}</button>
+          <button class="btn sec" data-act="go" data-route="profile">${t("path.change")}</button></div>
+      </div>
+      ${ring(m, t("path.match"))}
+    </div>
+  </section>
+
+  <div class="split">
+    <section class="card pad-lg"><h2>${t("path.why")}</h2>
+      <div class="grid" style="gap:8px">${whyPath(role).map(x=>`<div class="row" style="gap:8px; align-items:flex-start">
+        <span style="color:var(--ok)">${ic("i-check")}</span><span>${esc(x)}</span></div>`).join("")}</div>
+      <div class="rule"></div>
+      <h4>${t("path.basis")}</h4><p class="cap" style="margin:0">${t("path.basisBody")}</p>
+    </section>
+    <div class="grid" style="gap:14px; align-content:start">
+      <div class="card"><div class="row spread"><div><div class="cap">${t("path.strengths")}</div>
+        <div class="stat"><span class="num">${nf(g.have.length)}</span></div></div><span style="color:var(--ok)">${ic("i-check","i-lg")}</span></div>
+        <p class="cap" style="margin:8px 0 0">${g.have.map(s=>esc(nm(s))).join(sep())||"—"}</p></div>
+      <div class="card"><div class="row spread"><div><div class="cap">${t("path.gaps")}</div>
+        <div class="stat"><span class="num">${nf(g.dev.length)}</span></div></div><span style="color:var(--warn)">${ic("i-alert","i-lg")}</span></div>
+        <p class="cap" style="margin:8px 0 0">${g.dev.map(s=>esc(nm(s))).join(sep())||"—"}</p>
+        <div class="row" style="margin-top:10px"><button class="btn sec sm" data-act="go" data-route="skills">${t("sk.title")}</button>
+        <button class="btn sec sm" data-act="go" data-route="analysis">${t("sw.title")}</button></div></div>
+      <div class="card tint"><h3 style="margin:0">${t("path.nextStep")}</h3><p style="margin:6px 0 10px">${t("path.nextBody")}</p>
+        <button class="btn" data-act="go" data-route="plan">${t("path.startPlan")}</button></div>
+    </div>
+  </div>
+
+  <section class="card pad-lg"><h2>${t("path.alts")}</h2><div class="rule"></div>
+    <div class="grid g3">${alts.map(x=>`<div class="card hov">
+      <div class="row spread"><h3 style="margin:0">${esc(nm(x.role))}</h3><span class="pill brand">${pc(x.m)}</span></div>
+      ${bar(x.m)}
+      <button class="btn sec sm" style="margin-top:10px" data-act="set-role" data-id="${x.role.id}">${t("path.pick")}</button>
+    </div>`).join("")}</div>
+  </section>
+  <p class="cap">${t("path.caveat")}</p>`;
+}
+
+/* ------------------------------ 3. skills -------------------------------- */
+function vSkills(){
+  const role=roleById(state.profile.role); if(!role) return needProfile();
+  const g=gapOf(role);
+  const cov = Math.round(role.skills.reduce((a,s)=>a+lvl(s.id),0)/(role.skills.length*100)*100);
+  return `
+  <section class="card pad-lg">
+    <div class="row spread"><div><h1 style="margin:0">${t("sk.title")}</h1>
+      <p class="cap" style="margin:4px 0 0">${t("sk.sub")}</p></div>
+      <div><div class="cap">${t("sk.coverage")}</div><div class="stat"><span class="num">${pc(cov)}</span></div></div></div>
+    <div class="rule"></div>
+    ${gapBridge(cov)}
+    <div class="row" style="gap:14px; margin:14px 0">
+      <span class="pill ok">${ic("i-check")} ${t("sk.have")} ${nf(g.have.length)}</span>
+      <span class="pill">${t("sk.dev")} ${nf(g.dev.length)}</span>
+      <span class="pill gold">${ic("i-star")} ${t("sk.prio")} ${nf(g.prio.length)}</span>
+    </div>
+    ${role.skills.map(s=>{
+      const v=lvl(s.id), pr=g.prio.includes(s);
+      return `<div class="barline">
+        <div class="lab"><span>${v>=75?`<span style="color:var(--ok)">${ic("i-check")}</span>`:pr?`<span style="color:var(--warn)">${ic("i-star")}</span>`:"○"}
+          ${esc(nm(s))}${s.core?` <span class="pill" style="font-size:11px">${state.locale==="ar"?"أساسية":"core"}</span>`:""}</span>
+          <b>${pc(v)}</b></div>
+        ${bar(v, v<40?"low":v<70?"warn":null)}
+        <div class="row" style="gap:6px">${[0,25,50,75,100].map(x=>`<button class="chip" data-on="${v===x?1:0}" data-act="set-skill" data-id="${s.id}" data-v="${x}" style="padding:4px 10px; font-size:12.5px">${nf(x)}</button>`).join("")}</div>
+      </div>`;
+    }).join("")}
+  </section>
+  <section class="card"><div class="row spread"><span class="cap">${t("sk.legend")}</span>
+    <button class="btn sm" data-act="go" data-route="plan">${t("plan.build")}</button></div></section>`;
+}
+
+/* ------------------------------- 4. plan --------------------------------- */
+function vPlan(){
+  const role=roleById(state.profile.role); if(!role) return needProfile();
+  const g=gapOf(role), prog=planProgress();
+  const phases=[1,2,3,4];
+  return `
+  <section class="card pad-lg">
+    <div class="row spread"><div><h1 style="margin:0">${t("plan.title")}</h1>
+      <p class="cap" style="margin:4px 0 0">${esc(nm(role))}</p></div>
+      <div style="min-width:160px"><div class="row spread"><span class="cap">${t("dash.planProg")}</span><b>${pc(prog)}</b></div>${bar(prog)}</div></div>
+    <div class="rule"></div>
+    <h4>${t("plan.picks")}</h4>
+    <div class="row">${role.skills.map(s=>{
+      const on=state.picks.skills.includes(s.id);
+      return `<button class="chip" data-on="${on?1:0}" data-act="pick-skill" data-id="${s.id}">${esc(nm(s))} <span class="cap">${pc(lvl(s.id))}</span></button>`;
+    }).join("")}</div>
+    <div class="row" style="margin-top:14px"><button class="btn" data-act="build-plan">${state.plan.length?t("plan.rebuild"):t("plan.build")}</button>
+      ${state.picks.orgs.length?`<span class="pill">${ic("i-org")} ${nf(state.picks.orgs.length)}</span>`:""}</div>
+  </section>
+  ${state.plan.length? `<section class="card pad-lg">
+    ${milestoneTrack()}
+    <div class="note" style="margin-bottom:16px">${t("plan.note")}</div>
+    ${phases.map(n=>{
+      const items=state.plan.filter(i=>(i.phase||1)===n); if(!items.length) return "";
+      const done=items.every(i=>i.status==="done");
+      return `<div class="phase" style="margin-bottom:6px">
+        <div class="phase-rail"><div class="n" data-done="${done?1:0}">${done?ic("i-check"):nf(n).padStart(2,"0")}</div>
+          ${n<4?'<div class="line"></div>':""}</div>
+        <div style="padding-bottom:18px">
+          <div class="cap">${t("plan.phase")} ${nf(n).padStart(2,"0")}</div>
+          <h3 style="margin:0 0 10px">${phaseName(n)}</h3>
+          <div class="grid" style="gap:9px">${items.map(taskRow).join("")}</div>
+        </div></div>`;
+    }).join("")}
+    </section>`
+   : `<section class="card"><div class="empty">${art("il-empty","art")}<p>${t("plan.empty")}</p>
+      <button class="btn" data-act="build-plan">${t("plan.build")}</button></div></section>`}`;
+}
+function taskRow(i){
+  const late = i.status!=="done" && new Date(i.due)<today();
+  return `<div class="task" data-done="${i.status==="done"?1:0}">
+    <button class="box" data-s="${i.status}" data-act="cycle" data-id="${i.id}" aria-label="${t("plan.status."+i.status)}">${ic("i-check")}</button>
+    <div style="flex:1; min-width:0">
+      <div class="tt">${esc(state.locale==="ar"?i.ar:i.en)}</div>
+      <div class="row" style="gap:8px; margin-top:4px">
+        ${i.mins?`<span class="cap">${ic("i-clock")} ${nf(i.mins)} ${t("ui.min")}</span>`:""}
+        ${i.prio?`<span class="pill ${i.prio==="high"?"gold":""}" style="font-size:11.5px">${t("tasks.prio."+i.prio)}</span>`:""}
+        <span class="cap" ${late?'style="color:var(--warn)"':""}>${late?t("plan.overdue"):t("plan.due")} ${df(i.due)}</span>
+        ${i.url?`<a class="pill brand" href="${i.url}" target="_blank" rel="noopener" style="font-size:11.5px">${t("op.visit")}</a>`:""}
+      </div>
+    </div></div>`;
+}
+
+/* ------------------------------- 5. tasks -------------------------------- */
+function vTasks(){
+  if(!state.plan.length) return `<section class="card"><div class="empty">${art("il-empty","art")}
+    <h2>${t("tasks.empty")}</h2><button class="btn" data-act="go" data-route="plan">${t("plan.build")}</button></div></section>`;
+  const open=state.plan.filter(i=>i.status!=="done"), done=state.plan.filter(i=>i.status==="done");
+  const todayL=open.slice(0,3), up=open.slice(3);
+  return `
+  <section class="card pad-lg">
+    <div class="row spread"><h1 style="margin:0">${t("tasks.title")}</h1>
+      <span class="pill brand">${nf(done.length)} ${t("ui.of")} ${nf(state.plan.length)} ${t("tasks.progress")}</span></div>
+    <div style="margin-top:10px">${bar(planProgress())}</div>
+  </section>
+  <section class="card pad-lg"><h2>${t("tasks.today")}</h2><div class="rule"></div>
+    <div class="grid" style="gap:9px">${todayL.map(taskRow).join("") || `<p class="cap">${t("dash.allDone")}</p>`}</div></section>
+  ${up.length?`<section class="card pad-lg"><h2>${t("tasks.upcoming")}</h2><div class="rule"></div>
+    <div class="grid" style="gap:9px">${up.map(taskRow).join("")}</div></section>`:""}
+  ${done.length?`<section class="card pad-lg"><h2>${t("tasks.done")}</h2><div class="rule"></div>
+    <div class="grid" style="gap:9px">${done.map(taskRow).join("")}</div></section>`:""}`;
+}
+
+/* -------------------------------- 6. CV ---------------------------------- */
+function vCV(){
+  const p=state.profile, role=roleById(p.role), checks=cvChecks(), sc=cvScore();
+  const named = role? role.skills.filter(s=>lvl(s.id)>=50):[];
+  const missing = role? role.skills.filter(s=>lvl(s.id)<50).slice(0,5):[];
+  const failed = checks.filter(c=>!c.ok);
+  return `
+  <div class="split wide">
+    <section class="card pad-lg no-print">
+      <div class="row spread" style="align-items:flex-start">
+        <div><h1 style="margin:0">${t("cv.title")}</h1><p class="cap" style="margin:0">${t("cv.atsNote")}</p></div>
+        ${art("il-cv-doc","art art-side", t("vis.cvAlt"))}
+      </div>
+      <div class="grid g3" style="margin:14px 0">
+        <div class="card"><div class="cap">${t("cv.ats")}</div><div class="stat"><span class="num">${nf(sc)}<small>/100</small></span></div>${bar(sc, sc<50?"low":sc<80?"warn":null)}</div>
+        <div class="card"><div class="cap">${t("cv.missing")}</div><div class="stat"><span class="num">${nf(missing.length)}</span></div></div>
+        <div class="card"><div class="cap">${t("cv.sugg")}</div><div class="stat"><span class="num">${nf(failed.length)}</span></div></div>
+      </div>
+      <h4>${t("cv.editor")}</h4>
+      <label class="fl" for="cvname">${t("ob.name")}</label><input id="cvname" type="text" data-bind="name" value="${esc(p.name)}">
+      <label class="fl" for="cvhead">${t("cv.headline")}</label>
+      <input id="cvhead" type="text" data-bind="headline" value="${esc(p.headline|| (role?nm(role):""))}">
+      <label class="fl" for="cvsum">${t("cv.summary")}</label><textarea id="cvsum" data-bind="summary">${esc(p.summary)}</textarea>
+      <label class="fl" for="cvmail">${t("cv.contact")}</label><input id="cvmail" type="email" data-bind="email" value="${esc(p.email)}">
+      <div class="rule"></div>
+      <h4>${t("cv.sugg")}</h4>
+      <div class="grid" style="gap:8px">${checks.map(c=>`<div class="row" style="gap:8px; align-items:flex-start">
+        <span style="color:${c.ok?"var(--ok)":"var(--warn)"}">${ic(c.ok?"i-check":"i-alert")}</span>
+        <span class="${c.ok?"cap":""}">${state.locale==="ar"?c.ar:c.en}</span></div>`).join("")}</div>
+      ${missing.length?`<p class="cap" style="margin-top:12px">${t("cv.missing")}: ${missing.map(s=>esc(nm(s))).join(sep())}</p>`:""}
+      <div class="row" style="margin-top:14px">
+        <button class="btn" data-act="improve-cv">${ic("i-spark")} ${t("cv.improve")}</button>
+        <button class="btn sec" data-act="print">${t("cv.print")}</button>
+        <button class="btn sec" data-act="copy-cv">${t("ui.copy")}</button>
+      </div>
+      <p class="cap" style="margin-top:10px">${t("ai.how")}</p>
+    </section>
+
+    <section class="stack">
+      <h4 class="no-print">${t("cv.preview")}</h4>
+      <div class="cvsheet" id="cvdoc">
+        <h2 style="margin-bottom:0">${esc(p.name||"—")}</h2>
+        <div>${esc(p.headline || (role?nm(role):"—"))}</div>
+        ${p.email?`<div>${esc(p.email)}</div>`:""}
+        <h3>${t("cv.sections.summary")}</h3>
+        <div>${esc(p.summary || (state.locale==="ar"
+          ? `تخصص ${p.major||"—"}${p.uni?` — ${p.uni}`:""}${p.year?`، دفعة ${p.year}`:""}. الهدف: دور ${role?nm(role):"—"}.`
+          : `${p.major||"—"} graduate${p.uni?` from ${p.uni}`:""}${p.year?`, class of ${p.year}`:""}. Targeting a ${role?nm(role):"—"} role`))}</div>
+        <h3>${t("cv.sections.skills")}</h3>
+        <div>${named.length?named.map(s=>esc(nm(s))).join(sep()):"—"}</div>
+        <h3>${t("cv.sections.edu")}</h3>
+        <div>${esc(p.major||"—")}${p.uni?` — ${esc(p.uni)}`:""}${p.year?` (${yf(p.year)})`:""}${(!p.gpaSkip&&p.gpa)?` — ${t("ob.gpa")} ${nf(p.gpa)}/${nf(p.gpaScale)}`:""}</div>
+        <h3>${t("cv.sections.exp")}</h3>
+        <div>${t("exps."+p.exp)}${p.coop?` — ${t("ob.coop")}`:""}</div>
+        <h3>${t("cv.sections.proj")}</h3>
+        ${state.projects.length? state.projects.map(x=>`<div style="margin-bottom:8px"><b>${esc(x.title||"—")}</b><br>${esc(x.problem)} — ${esc(x.approach)} — ${esc(x.result)}</div>`).join("") : "<div>—</div>"}
+      </div>
+    </section>
+  </div>`;
+}
+
+/* ---------------------------- 7. portfolio ------------------------------- */
+function vPortfolio(){
+  const role=roleById(state.profile.role);
+  return `
+  <section class="card pad-lg">
+    <div class="row spread"><div><h1 style="margin:0">${t("pf.title")}</h1>
+      <p class="cap" style="margin:4px 0 0">${t("pf.emptySub")}</p></div>
+      <span class="pill brand">${nf(pfScore())}%</span></div>
+  </section>
+  ${state.projects.length? `<div class="grid g2">${state.projects.map((x,i)=>`
+    <article class="card hov">
+      <h3 style="margin:0">${esc(x.title||"—")}</h3>
+      <p class="cap" style="margin:6px 0">${esc(x.problem)} → ${esc(x.approach)} → ${esc(x.result)}</p>
+      ${x.skills?`<div class="row" style="gap:6px">${x.skills.split(",").map(s=>`<span class="pill">${esc(s.trim())}</span>`).join("")}</div>`:""}
+      <div class="row" style="margin-top:12px">
+        ${x.link?`<a class="btn sec sm" href="${esc(x.link)}" target="_blank" rel="noopener">${t("ui.view")}</a>`:""}
+        <button class="btn sec sm" data-act="rm-project" data-i="${i}">${t("ui.del")}</button></div>
+    </article>`).join("")}</div>`
+   : `<section class="card"><div class="empty">${art("il-portfolio","art")}<h2>${t("pf.empty")}</h2>
+      <p class="cap">${t("pf.emptySub")}</p></div></section>`}
+  <section class="card pad-lg">
+    <h2>${t("pf.add")}</h2>
+    <div class="grid g2">
+      <div><label class="fl" for="pj-title">${t("pf.name")}</label><input id="pj-title" type="text"></div>
+      <div><label class="fl" for="pj-skills">${t("pf.skills")}</label><input id="pj-skills" type="text" placeholder="${role?role.skills.slice(0,3).map(s=>nm(s)).join(", "):""}"></div>
+      <div><label class="fl" for="pj-problem">${t("pf.problem")}</label><input id="pj-problem" type="text"></div>
+      <div><label class="fl" for="pj-approach">${t("pf.approach")}</label><input id="pj-approach" type="text"></div>
+      <div><label class="fl" for="pj-result">${t("pf.result")}</label><input id="pj-result" type="text"></div>
+      <div><label class="fl" for="pj-link">${t("pf.link")}</label><input id="pj-link" type="text"></div>
+    </div>
+    <button class="btn" style="margin-top:14px" data-act="add-project">${ic("i-plus")} ${t("pf.add")}</button>
+  </section>`;
+}
+
+/* ----------------------------- 8. linkedin ------------------------------- */
+function vLinkedIn(){
+  const p=state.profile, role=roleById(p.role), sc=liScore(), checks=liChecks();
+  const named = role? role.skills.filter(s=>lvl(s.id)>=50).slice(0,5):[];
+  const sugg = {
+    headline: role? `${nm(role)}${p.major?" — "+p.major:""}${named.length?" — "+named.slice(0,2).map(s=>nm(s)).join(sep()):""}` : "",
+    about: state.locale==="ar"
+      ? `تخصص ${p.major||"—"}. أعمل الآن على ${named.slice(0,2).map(s=>nm(s)).join(" و") || "بناء مهاراتي الأساسية"}، وأبحث عن فرصة ${role?nm(role):""}.`
+      : `${p.major||"—"} graduate, currently building ${named.slice(0,2).map(s=>nm(s)).join(" and ") || "my core skills"}. Looking for a ${role?nm(role):""} opportunity`,
+    skills: named.map(s=>nm(s)).join(sep()) || t("li.addSkills"),
+    exp: state.locale==="ar"? `${t("exps."+p.exp)}${p.coop?" — تدريب تعاوني":""}` : `${t("exps."+p.exp)}${p.coop?" — co-op training":""}`
+  };
+  const netAr = `السلام عليكم، أنا ${p.name||"..."} من تخصص ${p.major||"..."}. أتابع عمل فريقكم، وأعمل حاليًا على ${named[0]?nm(named[0]):"..."}. هل تسمح لي بعشر دقائق أسألك فيها عن أول سنة في دور ${role?nm(role):"..."}؟ لن أطلب وظيفة، أريد أن أفهم الطريق فقط`;
+  return `
+  <section class="card pad-lg">
+    <div class="split wide" style="align-items:center">
+      <div><h1 style="margin:0">${t("li.title")}</h1><p class="cap">${t("li.score")}</p>
+        <div class="row">${checks.map(c=>`<span class="pill ${c.ok?"ok":"warn"}">${ic(c.ok?"i-check":"i-alert")} ${t("li."+c.key)}</span>`).join("")}</div></div>
+      <div class="row" style="gap:14px; justify-content:flex-end">
+        ${photoSlot("linkedin", t("vis.liAlt"), "il-profile-card", "art art-side")}
+        ${ring(sc, t("li.score"))}</div>
+    </div>
+  </section>
+  <div class="grid g2">
+    ${checks.map(c=>`<section class="card">
+      <div class="row spread"><h3 style="margin:0">${t("li."+c.key)}</h3>
+        <span class="pill ${c.ok?"ok":"warn"}">${c.ok?t("li.good"):t("li.needs")}</span></div>
+      <div class="rule"></div>
+      <div class="cap">${t("li.suggested")}</div>
+      <p style="margin:6px 0 10px">${esc(sugg[c.key])}</p>
+      <button class="btn sec sm" data-act="copy" data-text="${esc(sugg[c.key])}">${t("ui.copy")}</button>
+    </section>`).join("")}
+  </div>
+  <section class="card pad-lg"><h2>${ic("i-mail")} ${t("li.net")}</h2><div class="rule"></div>
+    <p>${esc(netAr)}</p><button class="btn sec sm" data-act="copy" data-text="${esc(netAr)}">${t("ui.copy")}</button></section>`;
+}
+
+/* ---------------------------- 9. opportunities --------------------------- */
+function vOpps(){
+  const f=state.filters;
+  const list=ENTITIES.filter(e=>{
+    const q=f.q.trim().toLowerCase();
+    if(q && !(e.nameAr.includes(f.q.trim())||e.nameEn.toLowerCase().includes(q))) return false;
+    if(f.type!=="all"&&e.type!==f.type) return false;
+    if(f.cost!=="all"&&e.cost.type!==f.cost) return false;
+    if(f.format!=="all"&&e.format!==f.format) return false;
+    return true;
+  });
+  const sel=(id,key,val,opts)=>`<select id="${id}" data-filter="${key}">${opts.map(o=>`<option value="${o.v}" ${val===o.v?"selected":""}>${esc(o.l)}</option>`).join("")}</select>`;
+  return `
+  <section class="card pad-lg">
+    <div class="row spread" style="align-items:flex-start">
+      <h1 style="margin:0">${t("op.title")}</h1>
+      ${photoSlot("learning", t("vis.learnAlt"), "il-learning", "art art-side")}
+    </div>
+    <div class="note" style="margin:12px 0">${t("op.disclaimer")}</div>
+    <p class="cap">${t("op.note")}</p>
+    <div class="grid g4">
+      <div><label class="fl" for="q">${t("op.search")}</label><input id="q" type="text" data-filter="q" value="${esc(f.q)}"></div>
+      <div><label class="fl" for="ft">${t("op.type")}</label>${sel("ft","type",f.type,[{v:"all",l:t("op.all")}].concat(Object.keys(L().types).map(k=>({v:k,l:t("types."+k)}))))}</div>
+      <div><label class="fl" for="fc">${t("op.cost")}</label>${sel("fc","cost",f.cost,[{v:"all",l:t("op.all")}].concat(["free","paid","unknown"].map(k=>({v:k,l:t("costs."+k)}))))}</div>
+      <div><label class="fl" for="ff">${t("op.format")}</label>${sel("ff","format",f.format,[{v:"all",l:t("op.all")}].concat(["online","in_person","hybrid","unknown"].map(k=>({v:k,l:t("formats."+k)}))))}</div>
+    </div>
+    <div class="row" style="margin-top:12px"><span class="pill">${nf(list.length)} ${t("op.count")}</span>
+      <button class="btn sec sm" data-act="reset-filters">${t("op.reset")}</button></div>
+  </section>
+  <section class="card pad-lg tint">
+    <div class="row spread" style="align-items:flex-start">
+      <div style="flex:1 1 260px">
+        <span class="pill brand">${ic("i-check")} ${t("op.verified")}</span>
+        <h2 style="margin:10px 0 4px">${t("op.applyTitle")}</h2>
+        <p style="margin:0 0 12px">${t("op.applyBody")}</p>
+        <div class="row">
+          <a class="btn sm" href="${ATABAH.browseUrl}" target="_blank" rel="noopener">${t("op.visit")} — ${esc(nm(ATABAH))}</a>
+          <a class="btn sec sm" href="${ATABAH.sourceUrl}" target="_blank" rel="noopener">${t("op.source")}</a>
+        </div>
+        <p class="cap" style="margin:10px 0 0">${t("op.checked")} ${df(ATABAH.verifiedAt)}</p>
+      </div>
+    </div>
+  </section>
+  ${list.length? `<div class="grid g2">${list.map(e=>{
+    const on=state.picks.orgs.includes(e.id), ok = e.status==="verified";
+    return `<article class="card hov">
+      <div class="row spread"><h3 style="margin:0">${esc(nm(e))}</h3>
+        <span class="pill ${ok?"ok":"gold"}">${ok?ic("i-check")+" "+t("op.verified"):t("op.demo")}</span></div>
+      <span class="pill" style="margin-top:8px">${t("types."+e.type)}</span>
+      <div class="rule"></div>
+      ${ok?`<p style="margin:0 0 8px">${esc(state.locale==="ar"?e.purposeAr:e.purposeEn)}</p>`:""}
+      <div class="cap">${t("op.cost")}: ${t("costs."+e.cost.type)}</div>
+      <div class="cap">${t("op.format")}: ${t("formats."+e.format)}</div>
+      ${ok?"":`<div class="cap">${t("op.why")}: ${t("op.whyPending")}</div>`}
+      <div class="row" style="margin-top:12px"><button class="btn ${on?"":"sec"} sm" data-act="pick-org" data-id="${e.id}">
+        ${on?ic("i-check"):""} ${on?t("op.following"):t("op.follow")}</button>
+        ${ok&&e.browseUrl?`<a class="btn sm" href="${e.browseUrl}" target="_blank" rel="noopener">${t("op.visit")}</a>`:""}</div>
+      <p class="cap" style="margin:10px 0 0">${ok?`${t("op.checked")} ${df(e.verifiedAt)} — ${e.sourceUrl.replace("https://","")}`:t("op.pending")}</p>
+    </article>`;}).join("")}</div>`
+   : `<section class="card"><div class="empty">${art("il-empty","art")}<p>${t("op.none")}</p>
+      <button class="btn sm" data-act="reset-filters">${t("op.reset")}</button></div></section>`}`;
+}
+
+/* --------------------------- 10. assessment ------------------------------ */
+function vProfile(){
+  const s=state.step;
+  const titles=["ob.s1","ob.s2","ob.s3","ob.s4","ob.s5","ob.s6"];
+  const steps=[st1,st2,st3,st4,st5,st6];
+  return `<section class="card pad-lg">
+    <div class="row spread"><h1 style="margin:0">${t("ob.title")}</h1>
+      <span class="pill brand">${t("ob.stepOf")} ${nf(s+1)} ${t("ui.of")} ${nf(6)}</span>
+      ${art("il-discover","art art-side flip-dir", t("vis.discoverAlt"))}</div>
+    <div class="stepper" style="margin-top:14px">${[0,1,2,3,4,5].map(i=>`<i data-on="${i<=s?1:0}"></i>`).join("")}</div>
+    <div class="row cap" style="gap:14px; margin-bottom:10px">${titles.map((k,i)=> i===s?`<b style="color:var(--text)">${t(k)}</b>`:`<span>${t(k)}</span>`).join("")}</div>
+    <div class="rule"></div>
+    <div class="reveal">${steps[s]()}</div>
+    <div class="err" id="err" role="alert"></div>
+    <div class="row spread" style="margin-top:6px">
+      <button class="btn sec" data-act="ob-back" ${s===0?"disabled":""}>${ic("i-arrow","icon dir-icon")} ${t("ui.back")}</button>
+      <button class="btn" data-act="ob-next">${s===5?t("ob.analyze"):t("ui.next")}</button>
+    </div>
+  </section>`;
+}
+function selEl(id,val,opts,ph){ return `<select id="${id}" data-bind="${id}"><option value="">${ph||"—"}</option>
+  ${opts.map(o=>`<option value="${o.v}" ${val===o.v?"selected":""}>${esc(o.l)}</option>`).join("")}</select>`; }
+function st1(){ const p=state.profile, y=new Date().getFullYear(), yrs=[];
+  for(let i=y+1;i>=y-12;i--) yrs.push({v:String(i),l:yf(i)});
+  return `<div class="grid g2">
+    <div><label class="fl" for="name">${t("ob.name")}</label><input id="name" type="text" data-bind="name" value="${esc(p.name)}"></div>
+    <div><label class="fl" for="uni">${t("ob.uni")}</label><input id="uni" type="text" data-bind="uni" value="${esc(p.uni)}"></div>
+    <div><label class="fl" for="field">${t("ob.field")} <span class="cap">(${t("ui.req")})</span></label>${selEl("field",p.field,FIELDS.map(f=>({v:f.id,l:nm(f)})))}</div>
+    <div><label class="fl" for="major">${t("ob.major")}</label><input id="major" type="text" data-bind="major" value="${esc(p.major)}"></div>
+    <div><label class="fl" for="year">${t("ob.year")} <span class="cap">(${t("ui.req")})</span></label>${selEl("year",p.year,yrs)}</div>
+    <div><label class="fl" for="gpa">${t("ob.gpa")}</label>
+      <div class="row" style="gap:8px"><input id="gpa" type="number" step="0.01" min="0" data-bind="gpa" value="${esc(p.gpa)}" ${p.gpaSkip?"disabled":""} style="flex:1">
+      ${selEl("gpaScale",p.gpaScale,[{v:"4",l:nf(4)},{v:"5",l:nf(5)}],t("ob.gpaScale"))}</div>
+      <label class="check" style="margin-top:8px"><input type="checkbox" data-bind="gpaSkip" ${p.gpaSkip?"checked":""}> ${t("ob.gpaSkip")}</label></div>
+  </div>`; }
+function st2(){ const p=state.profile;
+  return `<div class="grid g2">
+    <div><label class="fl" for="exp">${t("ob.exp")}</label>${selEl("exp",p.exp,Object.keys(L().exps).map(k=>({v:k,l:t("exps."+k)})))}</div>
+    <div><label class="fl" for="courses">${t("ob.courses")}</label><input id="courses" type="number" min="0" max="99" data-bind="courses" value="${esc(p.courses)}"></div>
+  </div>
+  <label class="check" style="margin-top:12px"><input type="checkbox" data-bind="coop" ${p.coop?"checked":""}> ${t("ob.coop")}</label>
+  <div class="rule"></div><h4>${t("ob.presence")}</h4>
+  <div class="grid g3">${["cv","li","pf"].map(k=>`<label class="check"><input type="checkbox" data-bind="presence.${k}" ${p.presence[k]?"checked":""}> ${t("pres."+k)}</label>`).join("")}</div>`; }
+function st3(){ const p=state.profile;
+  const roles=ROLES.map(r=>({v:r.id,l:nm(r)}));
+  const role=roleById(p.role);
+  const bank = role? role.skills : [...new Map(ROLES.filter(r=>r.field===p.field||!p.field).flatMap(r=>r.skills).map(s=>[s.id,s])).values()].slice(0,12);
+  return `<div class="grid g2">
+    <div><label class="fl" for="role">${t("ob.role")} <span class="cap">(${t("ui.req")})</span></label>${selEl("role",p.role,roles)}</div>
+    <div><label class="fl" for="direction">${t("ob.dir")}</label>${selEl("direction",p.direction,["stay","transition","undecided"].map(k=>({v:k,l:t("dirs."+k)})))}</div>
+  </div>
+  <p class="cap" style="margin-top:14px">${t("ob.skillsHint")}</p>
+  <div class="row">${bank.map(s=>{ const v=lvl(s.id);
+    return `<button class="skill-chip" data-act="cycle-skill" data-id="${s.id}">
+      <span class="t"><span>${esc(nm(s))}</span><b>${pc(v)}</b></span>${bar(v, v<40?"low":v<70?"warn":null)}</button>`;}).join("")}</div>`; }
+function st4(){ const p=state.profile;
+  return `<p class="cap">${t("ob.interests")}</p>
+  <div class="row">${INTERESTS.map(i=>`<button class="chip" data-on="${p.interests.includes(i.id)?1:0}" data-act="interest" data-id="${i.id}">${esc(nm(i))}</button>`).join("")}</div>`; }
+function st5(){ const p=state.profile;
+  return `<p class="cap">${t("ob.cvHint")}</p>
+  <input type="file" id="cvfile" accept=".pdf,.docx" data-act="cv">
+  <label class="fl" for="cvtext">${t("ob.cvPaste")}</label>
+  <textarea id="cvtext" data-bind="cvText">${esc(p.cvText)}</textarea>
+  <div id="cvmsg" class="cap" aria-live="polite"></div>`; }
+function st6(){ const p=state.profile, role=roleById(p.role);
+  const rows=[[t("ob.field"),p.field?nm(FIELDS.find(f=>f.id===p.field)):"—"],[t("ob.year"),p.year?yf(p.year):"—"],
+    [t("ob.exp"),t("exps."+p.exp)],[t("ob.role"),role?nm(role):"—"],[t("ob.dir"),p.direction?t("dirs."+p.direction):"—"]];
+  return `<h4>${t("ob.review")}</h4>
+  <div class="grid g2">${rows.map(([k,v])=>`<div class="card"><div class="cap">${k}</div><b>${esc(v)}</b></div>`).join("")}</div>
+  <p class="cap" style="margin-top:14px">${t("path.caveat")}</p>`; }
+
+function vAnalyzing(){
+  const steps=["an.s1","an.s2","an.s3","an.s4"];
+  return `<section class="card pad-lg" style="max-width:520px; margin-inline:auto">
+    <h2>${t("an.title")}</h2>
+    <div class="grid" style="gap:12px; margin-top:14px">
+      ${steps.map((k,i)=>`<div class="row" style="gap:10px">
+        <span style="color:${i<analyzing?"var(--ok)":"var(--muted)"}">${i<analyzing?ic("i-check"):"○"}</span>
+        <span class="${i<analyzing?"":"cap"}">${t(k)}</span></div>`).join("")}
+    </div>
+    <div class="skel"></div><div class="skel" style="width:70%"></div>
+  </section>`;
+}
+function needProfile(){
+  return `<section class="card"><div class="empty">${art("il-discover","art flip-dir", t("vis.discoverAlt"))}<h2>${t("sk.noRole")}</h2>
+    <button class="btn" data-act="go" data-route="profile">${t("guide.start")}</button></div></section>`;
+}
+
+/* ------------------------- 11. guide / sources --------------------------- */
+function vGuide(){
+  const ar=state.locale==="ar";
+  const steps = ar? [
+    ["أكمل التقييم","ست خطوات: تعليمك، خبرتك، مهاراتك، اهتماماتك، سيرتك، ثم النتيجة، المعدل اختياري، ولا يُطلب رقم هوية ولا جوال",8],
+    ["اقرأ نتيجتك","نسبة الملاءمة وأسبابها معروضة كاملة: كيف حُسبت، وما نقاط قوتك، وما الذي ينقصك",4],
+    ["حدّث مهاراتك","كل مهارة بنسبة من 0 إلى 100. اضغط النسبة وسيتغير التحليل والخطة فورًا",3],
+    ["ابنِ خطتك","أربع مراحل: الأساسيات، المهارات التقنية، معرض الأعمال، ثم التقديم، لكل مهمة وقت متوقع وأولوية",3],
+    ["جهّز ملفك","السيرة بعمود واحد تُطبع PDF، ولينكدإن باقتراحات جاهزة للنسخ، ومعرض أعمال بأربعة أسطر لكل مشروع",5]
+  ] : [
+    ["Complete the assessment","Six steps: education, experience, skills, interests, CV, results, GPA is optional and no ID or phone is asked",8],
+    ["Read your result","The match and its reasons are shown in full: how it was computed, your strengths, and what's missing",4],
+    ["Update your skills","Each skill is 0–100%. Tap a level and the analysis and plan update instantly",3],
+    ["Build your plan","Four phases: foundation, technical skills, portfolio, then applying, each task has an estimated time and priority",3],
+    ["Prepare your profile","A single-column CV that prints to PDF, linkedIn suggestions ready to copy, and a four-line format per project",5]
+  ];
+  const legend=[
+    [`<span class="pill gold">${t("op.demo")}</span>`, ar?"الجهة مدرجة بالاسم فقط؛ برامجها وتكاليفها وروابطها غير متحققة ولذلك لا تُعرض":"Listed by name only; its programmes, costs and links are unverified and hidden"],
+    [`<span class="pill ok">${ic("i-check")} ${t("sk.have")}</span> <span class="pill gold">${ic("i-star")} ${t("sk.prio")}</span>`, ar?"مستوى المهارة مقابل الدور: 75% فأعلى تُحسب متوفرة، والنجمة مهارة أساسية ما زالت دون 50%.":"Skill level against the role: 75%+ counts as held; the star marks a core skill still under 50%."],
+    [`<span class="box" data-s="not_started"></span> <span class="box" data-s="in_progress"></span> <span class="box" data-s="done">${ic("i-check")}</span>`, ar?"مربع المهمة: لم تبدأ، جارية، منجزة، اضغط لتغيير الحالة":"Task box: not started, in progress, done, tap to change"],
+    [ic("i-spark","i-lg"), ar?"توصية محسوبة من قواعد داخل متصفحك، وليست ردّ نموذج لغوي":"A recommendation computed by rules in your browser, not a language-model reply"]
+  ];
+  const faq = ar? [
+    ["هل بياناتي تُرسل لأي جهة؟","لا، كل ما تكتبه يبقى في هذا المتصفح، وملف سيرتك يُقرأ في جهازك ثم يُهمل"],
+    ["لماذا بطاقات الجهات فارغة؟","لأن أي برنامج أو سعر أو شرط لم يُتحقق من مصدره الرسمي بعد، عرض رسوم أو موعد غير مؤكد قد يكلفك وقتًا ومالًا"],
+    ["ما معنى نسبة الملاءمة؟","حساب من ثلاثة أجزاء معلنة في صفحة المسار، هي مؤشر يقارن بين خياراتك، لا حكم نهائي عليك"],
+    ["أنا متردد بين البقاء في تخصصي والانتقال","اختر «لم أقرر بعد»، ثم جرّب دورين وقارن فجوة المهارات في كل منهما"]
+  ] : [
+    ["Is my data sent anywhere?","No, everything stays in this browser, and your CV file is read on your device then discarded"],
+    ["Why are the organization cards empty?","No programme, price or requirement has been verified against an official source yet"],
+    ["What does the match mean?","A three-part calculation shown on the path page, it compares your options; it is not a verdict"],
+    ["I'm torn between staying and switching","Choose \"Undecided\", then try two roles and compare the skill gap in each"]
+  ];
+  return `
+  <section class="card pad-lg mesh-host">${mesh()}<div class="split wide" style="align-items:center">
+    <div><h1 style="margin:0">${t("guide.title")}</h1><p>${t("guide.lead")}</p>
+      <button class="btn" data-act="go" data-route="profile">${t("guide.start")}</button></div>
+    ${art("il-hero-paths","art flip-dir", t("vis.heroAlt"))}</div></section>
+  <section class="card pad-lg"><h2>${t("guide.steps")}</h2><div class="rule"></div>
+    <div class="grid" style="gap:12px">${steps.map(([h,d,m],i)=>`<div class="phase">
+      <div class="phase-rail"><div class="n">${nf(i+1)}</div>${i<4?'<div class="line"></div>':""}</div>
+      <div style="padding-bottom:8px"><h3 style="margin:0">${esc(h)}</h3><p class="cap" style="margin:4px 0">${esc(d)}</p>
+        <span class="pill">${ic("i-clock")} ${nf(m)} ${t("ui.min")}</span></div></div>`).join("")}</div></section>
+  <section class="card pad-lg"><h2>${t("guide.legend")}</h2><div class="rule"></div>
+    <div class="grid" style="gap:14px">${legend.map(([m,d])=>`<div class="row" style="gap:14px; align-items:flex-start">
+      <div style="min-width:150px">${m}</div><div>${esc(d)}</div></div>`).join("")}</div></section>
+  <section class="card pad-lg"><div class="split wide" style="align-items:center">
+    <div><h2>${t("guide.notTitle")}</h2><p>${t("guide.notBody")}</p><p class="cap">${t("path.caveat")}</p></div>
+    ${art("il-privacy","art")}</div></section>
+  <section class="card pad-lg"><h2>${t("guide.faq")}</h2><div class="rule"></div>
+    <div class="grid g2">${faq.map(([q,a])=>`<div class="card"><h3 style="margin:0 0 4px">${esc(q)}</h3><p class="cap" style="margin:0">${esc(a)}</p></div>`).join("")}</div></section>`;
+}
+function vSources(){
+  const ar=state.locale==="ar";
+  const how = ar?["افتح الموقع الرسمي للجهة وانسخ رابط صفحة البرنامج نفسه لا الصفحة الرئيسية",
+    "املأ في السجل: اسم البرنامج، الغرض، الشروط، التكلفة، الصيغة، المدة",
+    "غيّر status من placeholder إلى verified، وأضف sourceUrl وverifiedAt",
+    "أعد التحقق كل ثلاثة أشهر؛ أي سجل أقدم من ذلك يعود placeholder",
+    "لا تُدخل اسم شخص، الجهات والأدوار والمجتمعات المهنية فقط"]
+   :["Open the official site and copy the programme page URL, not the homepage",
+     "Fill in: programme name, purpose, prerequisites, cost, format, duration",
+     "Change status from placeholder to verified and add sourceUrl and verifiedAt",
+     "Re-verify every three months; anything older reverts to placeholder",
+     "Never enter a person's name — organizations, role archetypes and communities only"];
+  const notes = ar?[
+    "كل سجلات الجهات بحالة placeholder: الأسماء كما زوّدتنا بها، ولم يُتحقق من أي برنامج أو تكلفة أو رابط، ولذلك لا يُعرض شيء منها",
+    "تصنيف كل جهة مستنتج من اسمها ويحتاج مراجعة، والأسماء الإنجليزية تقريبية",
+    "«مساعد مساري» محرك قواعد داخل المتصفح، لا نموذج لغوي ولا اتصال بالإنترنت، سُمّي مساعدًا لأنه يقترح الخطوة التالية فقط",
+    "نِسب الملاءمة والجاهزية وATS محسوبة من إجاباتك بمعادلات معلنة، وليست معايرة على سوق العمل السعودي",
+    "قراءة PDF وDOCX تعتمد على مكتبتين تُحمّلان في المتصفح؛ عند تعذّرها يظهر خيار لصق النص",
+    "تصدير السيرة عبر الطباعة إلى PDF بنص قابل للتحديد؛ تصدير DOCX غير مبني",
+    "الخطوط من Google Fonts في هذه النسخة، بينما يطلب المستند استضافتها ذاتيًا",
+    "كل الصور هنا رسوم SVG داخل الصفحة، مواضع التصوير البشري جاهزة في PHOTOS داخل الكود (hero، linkedin، learning): ضع فيها ملفات WebP بمقاسين مع width/height وسيستبدل التصوير الرسم تلقائيًا بتحميل كسول"]
+   :["Every organization record is a placeholder: names as supplied, with no verified programme, cost or link, so none are shown",
+     "Type labels are inferred from names and need review; English names are approximations",
+     "The Masari assistant is a rule engine in the browser — no language model, no network, it only suggests the next step",
+     "Match, readiness and ATS percentages are computed from your answers with stated formulas, not calibrated against the Saudi labour market",
+     "PDF and DOCX reading depends on two browser libraries; a paste-text fallback is shown if they fail",
+     "CV export is print-to-PDF with selectable text; DOCX export is not built",
+     "Fonts load from Google Fonts here, while the brief asks for self-hosted fonts",
+     "All imagery is inline SVG. Photography slots are wired in the PHOTOS map (hero, linkedin, learning): drop in WebP files at two widths with width/height and photos replace the illustrations, lazily loaded"];
+  return `
+  <section class="card pad-lg"><div class="split wide" style="align-items:center">
+    <div><h1 style="margin:0">${t("src.title")}</h1><h2 style="margin-top:14px">${t("src.how")}</h2>
+      <ol style="padding-inline-start:20px">${how.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>${art("il-privacy","art")}</div>
+    <h2>${t("src.pref")}</h2><p>${ar?"المواقع الرسمية للوزارات والهيئات والأكاديميات الوطنية والجهات المهنية المرخّصة، لا تُستخدم المدونات ولا حسابات إعادة النشر ولا مخرجات نماذج الذكاء الاصطناعي كمصدر":"Official ministry, authority, national academy and licensed professional-body sites, blogs, reposting accounts and AI output are not sources"}</p>
+  </section>
+  <section class="card pad-lg"><h2>${t("src.privacy")}</h2><p>${t("consent.body")}</p>
+    <button class="btn sec" data-act="delete">${t("src.del")}</button></section>
+  <section class="card pad-lg"><h2>${t("src.notes")}</h2>
+    <ul style="padding-inline-start:20px">${notes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`;
+}
+function vSettings(){
+  return `<section class="card pad-lg"><h1 style="margin:0">${t("nav.settings")}</h1><div class="rule"></div>
+    <div class="row"><button class="btn sec" data-act="lang">${t("ui.lang")}</button>
+      <button class="btn sec" data-act="theme">${t("ui.theme")}</button></div>
+    <div class="rule"></div>
+    <div class="row"><button class="btn sec" data-act="logout">${t("auth.logout")}</button></div>
+    <div class="rule"></div><p class="cap">${t("consent.body")}</p>
+    <button class="btn sec" data-act="delete">${t("src.del")}</button></section>`;
+}
+
+/* ------------------------------- overlay --------------------------------- */
+function renderOverlay(){
+  if(!pendingConsent){ overlay.innerHTML=""; return; }
+  overlay.innerHTML = `<div class="veil"><div class="modal" role="dialog" aria-modal="true" aria-label="${t("consent.title")}">
+    <h2>${t("consent.title")}</h2><p>${t("consent.body")}</p>
+    <div class="row spread"><button class="btn sec" data-act="consent-no">${t("consent.cancel")}</button>
+    <button class="btn" data-act="consent-yes">${t("consent.agree")}</button></div></div></div>`;
+  const b=overlay.querySelector("[data-act='consent-yes']"); if(b) b.focus();
+}
+function toast(msg){ const n=document.createElement("div"); n.className="toast"; n.setAttribute("role","status");
+  n.textContent=msg; document.body.appendChild(n); setTimeout(()=>n.remove(),2600); }
+
+/* -------------------------------- events --------------------------------- */
+document.addEventListener("click", ev=>{
+  if(moreOpen && !ev.target.closest(".side") && !ev.target.closest(".btn-more") && !ev.target.closest(".tab-more")){
+    moreOpen = false; sheetOpen = false; render();
+  }
+  const el=ev.target.closest("[data-act]"); if(!el) return;
+  const a=el.dataset.act, p=state.profile;
+  switch(a){
+    case "go": goTo(el.dataset.route); break;
+    case "back": {
+      let prev = routeHistory.pop();
+      while(prev === state.route && routeHistory.length > 0){
+        prev = routeHistory.pop();
+      }
+      state.route = prev || "home";
+      try{ history.pushState({route: state.route}, ""); }catch(e){}
+      moreOpen = false; sheetOpen = false;
+      save(); render(); window.scrollTo(0,0);
+      break;
+    }
+    case "toggle-more":
+    case "sheet":
+      moreOpen = !moreOpen; sheetOpen = moreOpen;
+      render();
+      break;
+    case "more-close":
+    case "sheet-close":
+      moreOpen = false; sheetOpen = false;
+      render();
+      break;
+    case "lang": state.locale = state.locale==="ar"?"en":"ar"; save(); render(); break;
+    case "theme": state.theme = state.theme==="dark"?"light":"dark"; save(); render(); break;
+    case "auth-tab": authMode = el.dataset.mode; render(); break;
+    case "auth-submit": authSubmit(); break;
+    case "logout": {
+      try{ sessionStorage.removeItem("masari.authed"); }catch(e){}
+      state.authed = false;
+      save();
+      render();
+      break;
+    }
+    case "cycle-skill": { const id=el.dataset.id, v=lvl(id); p.skills[id] = v>=100?0:v+25; save(); render(); break; }
+    case "set-skill": p.skills[el.dataset.id]=+el.dataset.v; save(); render(); break;
+    case "interest": { const id=el.dataset.id, i=p.interests.indexOf(id);
+      if(i>=0) p.interests.splice(i,1); else p.interests.push(id); save(); render(); break; }
+    case "start-role": p.role=el.dataset.id; state.step=0; goTo("profile"); break;
+    case "set-role": p.role=el.dataset.id; save(); render(); toast(nm(roleById(p.role))); break;
+    case "pick-skill": { const id=el.dataset.id, i=state.picks.skills.indexOf(id);
+      if(i>=0) state.picks.skills.splice(i,1); else state.picks.skills.push(id); save(); render(); break; }
+    case "pick-org": { const id=el.dataset.id, i=state.picks.orgs.indexOf(id);
+      if(i>=0) state.picks.orgs.splice(i,1); else state.picks.orgs.push(id); save(); render(); break; }
+    case "build-plan": buildPlan(); goTo("plan"); break;
+    case "cycle": { const it=state.plan.find(x=>x.id===el.dataset.id); if(!it) break;
+      it.status = it.status==="not_started"?"in_progress":it.status==="in_progress"?"done":"not_started"; save(); render(); break; }
+    case "reset-filters": state.filters={q:"",type:"all",cost:"all",format:"all"}; save(); render(); break;
+    case "add-project": { const g=id=>{const n=document.getElementById(id); return n?n.value.trim():"";};
+      const pj={title:g("pj-title"),problem:g("pj-problem"),approach:g("pj-approach"),result:g("pj-result"),link:g("pj-link"),skills:g("pj-skills")};
+      if(pj.title||pj.problem){ state.projects.push(pj); save(); render(); } break; }
+    case "rm-project": state.projects.splice(+el.dataset.i,1); save(); render(); break;
+    case "improve-cv": improveCV(); break;
+    case "print": window.print(); break;
+    case "copy-cv": { const n=document.getElementById("cvdoc"); copy(n?n.innerText:"", el); break; }
+    case "copy": copy(el.dataset.text, el); break;
+    case "ob-back": if(state.step>0){ state.step--; save(); render(); } break;
+    case "ob-next": obNext(); break;
+    case "consent-yes": state.consent=true; pendingConsent=null; save(); advance(); break;
+    case "consent-no": pendingConsent=null; renderOverlay(); break;
+    case "delete": if(confirm(t("src.delConfirm"))){ const l=state.locale, th=state.theme; wipe();
+      state.locale=l; state.theme=th; routeHistory=[]; goTo("sources"); toast(t("src.deleted")); } break;
+  }
+});
+function copy(txt, el){ if(!navigator.clipboard) return;
+  navigator.clipboard.writeText(txt).then(()=>{ const o=el.textContent; el.textContent=t("ui.copied"); setTimeout(()=>{el.textContent=o;},1400); }).catch(()=>{}); }
+function improveCV(){
+  const p=state.profile, role=roleById(p.role); if(!role) return;
+  const named = role.skills.filter(s=>lvl(s.id)>=50).map(s=>nm(s));
+  if(!p.headline) p.headline = `${nm(role)}${p.major?" — "+p.major:""}${named.length?" — "+named.slice(0,2).join(sep()):""}`;
+  if(!(p.summary||"").length) p.summary = state.locale==="ar"
+    ? `تخصص ${p.major||"—"}${p.uni?` — ${p.uni}`:""}${p.year?`، دفعة ${p.year}`:""}، أعمل على ${named.slice(0,2).join(" و")||"بناء مهاراتي الأساسية"}، وأستهدف دور ${nm(role)}.`
+    : `${p.major||"—"} graduate${p.uni?` from ${p.uni}`:""}${p.year?`, class of ${p.year}`:""}, building ${named.slice(0,2).join(" and ")||"my core skills"}, targeting a ${nm(role)} role`;
+  save(); render();
+  toast(state.locale==="ar"?"حدّثنا العنوان والنبذة من بياناتك":"Headline and summary filled from your data");
+}
+document.addEventListener("input", ev=>{
+  const el=ev.target;
+  if(el.dataset.bind){
+    const path=el.dataset.bind, val = el.type==="checkbox"?el.checked:el.value;
+    if(path.startsWith("presence")) state.profile.presence[path.split(".")[1]]=val;
+    else state.profile[path]=val;
+    if(path==="gpaSkip"){ const g=document.getElementById("gpa"); if(g){ g.disabled=val; if(val) state.profile.gpa=""; } }
+    save();
+    if(state.route==="cv"){ const d=document.getElementById("cvdoc"); if(d){ const s=el.selectionStart; refreshCV(); if(el.setSelectionRange&&s!=null){} } }
+  }
+  if(el.dataset.filter){
+    state.filters[el.dataset.filter]=el.value; save(); render();
+    const again=document.querySelector(`[data-filter="${el.dataset.filter}"]`);
+    if(again&&again.tagName==="INPUT"){ again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
+  }
+});
+function refreshCV(){ /* live preview without losing focus in the editor */
+  const host=document.getElementById("cvdoc"); if(!host) return;
+  const tmp=document.createElement("div"); tmp.innerHTML=vCV();
+  const fresh=tmp.querySelector("#cvdoc"); if(fresh) host.innerHTML=fresh.innerHTML;
+}
+document.addEventListener("change", async ev=>{
+  const el=ev.target; if(el.dataset.act!=="cv") return;
+  const msg=document.getElementById("cvmsg"), file=el.files&&el.files[0]; if(!file) return;
+  if(file.size>5*1024*1024){ if(msg) msg.textContent=t("ob.cvFail"); el.value=""; return; }
+  let text="";
+  try{
+    const buf=await file.arrayBuffer();
+    if(/\.pdf$/i.test(file.name) && window.pdfjsLib){
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const doc=await window.pdfjsLib.getDocument({data:buf}).promise;
+      for(let i=1;i<=Math.min(doc.numPages,6);i++){ const pg=await doc.getPage(i), c=await pg.getTextContent();
+        text += c.items.map(x=>x.str).join(" ")+"\n"; }
+    }else if(/\.docx$/i.test(file.name) && window.mammoth){
+      const r=await window.mammoth.extractRawText({arrayBuffer:buf}); text=r.value;
+    }
+  }catch(e){ text=""; }
+  el.value="";                                  // discard the file reference
+  const box=document.getElementById("cvtext");
+  if(text.trim()){ state.profile.cvText=text.trim().slice(0,4000); if(box) box.value=state.profile.cvText;
+    if(msg) msg.textContent=t("ob.cvRead"); save(); }
+  else if(msg) msg.textContent=t("ob.cvFail");
+});
+function obNext(){
+  const err=document.getElementById("err"), p=state.profile; let problem="";
+  if(state.step===0 && !p.field) problem=t("ob.errField");
+  if(state.step===0 && !problem && !p.year) problem=t("ob.errYear");
+  if(state.step===2 && !p.role) problem=t("ob.errRole");
+  if(problem){ if(err) err.textContent=problem; return; }
+  if(err) err.textContent="";
+  if(!state.consent){ pendingConsent=true; renderOverlay(); return; }
+  advance();
+}
+function advance(){
+  if(state.step<5){ state.step++; save(); render(); window.scrollTo(0,0); return; }
+  analyzing=1; render();
+  const tick=()=>{ analyzing++; if(analyzing<=4){ render(); setTimeout(tick,520); }
+    else { analyzing=0; state.completed=true; goTo("path"); toast(t("ob.done")); } };
+  setTimeout(tick,520);
+}
+document.addEventListener("submit", ev=>{
+  if(ev.target && ev.target.classList.contains("auth-form")){
+    ev.preventDefault();
+    authSubmit();
+  }
+});
+render();
+</script>
+</body>
+</html>
